@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.mickaelbaron</groupId>
+	<artifactId>polldle-backend</artifactId>
+	<version>0.3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>polldle-parent</name>
+	<description>Voting done simply in real-time with Polldle. Polldle ~= Poll + the last part of Doo *DLE* (an Internet calendar tool for time management, famous for its simplification)
+</description>
+
+	<modules>
+		<module>polldle-api</module>
+		<module>polldle-server</module>
+	</modules>
+
+	<properties>
+		<!-- Owner: https://mvnrepository.com/artifact/org.aeonbits.owner/owner -->
+		<owner.version>1.0.10</owner.version>
+
+		<!-- Maven Dependency Plugin -->
+		<maven.dependency.version>3.1.1</maven.dependency.version>
+
+		<!-- MicroProfile implementation => MicroProfile 2.1 -->
+		<kumuluzee.version>3.4.1</kumuluzee.version>
+
+		<!-- Maven -->
+		<maven.compiler.version>3.1</maven.compiler.version>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+
+		<!-- Test -->
+		<cdi-unit.version>4.1.0</cdi-unit.version>
+		<junit.version>4.12</junit.version>
+		<mockito.version>1.10.19</mockito.version>
+		<weld.version>3.1.1.Final</weld.version>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Maven Compiler -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.version}</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${maven.dependency.version}</version>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<includeScope>runtime</includeScope>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- KumuluzEE -->
+			<dependency>
+				<groupId>com.kumuluz.ee</groupId>
+				<artifactId>kumuluzee-bom</artifactId>
+				<version>${kumuluzee.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Test -->
+			<dependency>
+				<groupId>org.jglue.cdi-unit</groupId>
+				<artifactId>cdi-unit</artifactId>
+				<version>${cdi-unit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.weld.se</groupId>
+				<artifactId>weld-se-core</artifactId>
+				<version>${weld.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
