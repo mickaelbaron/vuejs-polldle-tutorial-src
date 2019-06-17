@@ -33,7 +33,7 @@ git clone https://github.com/mickaelbaron/vuejs-polldle-tutorial-src
 
 ## Configure
 
-If you want to use a subdomain to deploy PollDLE (i.e. <http://www.mydomain.com/subdomain>), edit the *subdomain.conf* and replace all `YOUR_SUBDOMAIN` string by your preferred value (i.e. `polldle`).
+If you want to use a subdomain to deploy PollDLE (i.e. <http://localhost/YOUR_SUBDOMAIN>), edit the *subdomain.conf* and replace all `YOUR_SUBDOMAIN` string by your preferred value (i.e. `polldle`).
 
 ```yaml
 server {
@@ -64,33 +64,13 @@ In the case or you do not need a subdomain, go on next section.
 To build without subdomain: <http://www.mydomain.com/subdomain>, execute this command line:
 
 ```console
-$ docker-compose build --build-arg script_name=build
-Building backend
-...
-Successfully tagged mickaelbaron/polldle-backend:latest
-Building frontend
-...
-Successfully tagged mickaelbaron/polldle-vue:latest
-Building rp
-...
-Successfully tagged mickaelbaron/polldle-rp:latest
-...
+docker-compose build --build-arg script_name=build
 ```
 
 To build with subdomain: <http://www.mydomain.com>, execute this command line:
 
 ```console
-$ docker-compose build  --build-arg script_name=subdomain
-Building backend
-...
-Successfully tagged mickaelbaron/polldle-backend:latest
-Building frontend
-...
-Successfully tagged mickaelbaron/polldle-vue:latest
-Building rp
-...
-Successfully tagged mickaelbaron/polldle-rp:latest
-...
+docker-compose build  --build-arg script_name=subdomain
 ```
 
 To check if the images are been built, execute this command line:
