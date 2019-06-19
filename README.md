@@ -61,13 +61,13 @@ In the case or you do not need a subdomain, go on next section.
 
 ## Build
 
-To build without subdomain: <http://www.mydomain.com/subdomain>, execute this command line:
+To build without subdomain: <http://www.mydomain.com>, execute this command line:
 
 ```console
 docker-compose build --build-arg script_name=build
 ```
 
-To build with subdomain: <http://www.mydomain.com>, execute this command line:
+To build with subdomain: <http://www.mydomain.com/subdomain>, execute this command line:
 
 ```console
 docker-compose build  --build-arg script_name=subdomain
@@ -86,7 +86,7 @@ mickaelbaron/polldle-vue       latest              5d4359c80480        9 days ag
 
 ## Run
 
-From the root of the project
+From the root of the project, execute this command line:
 
 ```console
 docker-compose up -d
