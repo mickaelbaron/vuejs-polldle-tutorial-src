@@ -9,7 +9,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: process.env.VUE_APP_SUBDOMAIN_PATH,
+  base: process.env.VUE_APP_SUBPATH,
   routes: [
     {
       path: '/',

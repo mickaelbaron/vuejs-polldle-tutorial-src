@@ -1,7 +1,7 @@
 # Build env
 FROM node:lts-alpine as build-npm-stage
-ARG script_name=build
 LABEL maintainer="Mickael BARON"
+ARG script_name=build
 
 WORKDIR /polldle-vue
 COPY package*.json ./
@@ -10,9 +10,7 @@ COPY public ./public
 COPY src ./src
 COPY vue.config.js ./
 COPY .env.production ./
-COPY .env.subdomain ./
-
-# RUN echo $use_subdomain && if [ "$use_subdomain" == "true" ]; then npm run subdomain ; else npm run build ; fi
+COPY .env.subpath ./
 
 RUN npm run $script_name
 

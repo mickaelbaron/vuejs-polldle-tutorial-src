@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "subdomain": "vue-cli-service build --mode subdomain",
+    "subpath": "vue-cli-service build --mode subpath",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

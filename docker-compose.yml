@@ -7,7 +7,6 @@ services:
     image: mickaelbaron/polldle-backend
     environment: 
       KUMULUZEE_SERVER_HTTP_PORT: 9991
-      # KUMULUZEE_SERVER_BASEURL: http://0.0.0.0
     ports:
       - "9991:9991"
     networks:
@@ -20,7 +19,7 @@ services:
       - polldlenetwork
 
   rp:
-    build: .
+    build: polldle-rp/
     image: mickaelbaron/polldle-rp
     depends_on:
       - frontend
