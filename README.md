@@ -33,20 +33,22 @@ git clone https://github.com/mickaelbaron/vuejs-polldle-tutorial-src
 
 ## Configure
 
-If you want to use a subdomain to deploy PollDLE (i.e. <http://localhost/YOUR_SUBDOMAIN>), edit the *subdomain.conf* and replace all `YOUR_SUBDOMAIN` string by your preferred value (i.e. `polldle`).
+In the case you do not need a subpath, go to the next section.
+
+If you want to use a subpath to deploy PollDLE (i.e. <http://localhost/YOUR_SUBPATH>), edit the *subpath.conf* and replace all `YOUR_SUBPATH` string by your preferred value (i.e. `polldle`).
 
 ```yaml
 server {
     listen 80;
 
-    location /YOUR_SUBDOMAIN/server/ {
+    location /YOUR_SUBPATH/server/ {
         proxy_pass http://backend:9991/;
         proxy_http_version 1.1;
         proxy_set_header Connection "";
     }
 
-    location /YOUR_SUBDOMAIN/ {
-        rewrite ^/YOUR_SUBDOMAIN(/.*)$ $1 break;
+    location /YOUR_SUBPATH/ {
+        rewrite ^/YOUR_SUBPATH(/.*)$ $1 break;
         proxy_pass http://frontend;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -57,20 +59,18 @@ server {
 }
 ```
 
-In the case or you do not need a subdomain, go on next section.
-
 ## Build
 
-To build without subdomain: <http://www.mydomain.com>, execute this command line:
+To build without subpath: <https://localhost>, execute this command line:
 
 ```console
 docker-compose build --build-arg script_name=build
 ```
 
-To build with subdomain: <http://www.mydomain.com/subdomain>, execute this command line:
+To build with subpath: <http://localhost/YOUR_SUBPATH>, execute this command line:
 
 ```console
-docker-compose build  --build-arg script_name=subdomain
+docker-compose build  --build-arg script_name=subpath
 ```
 
 To check if the images are been built, execute this command line:
@@ -92,4 +92,4 @@ From the root of the project, execute this command line:
 docker-compose up -d
 ```
 
-Open your preferred web browser and go to this url: <http://localhost> (without subdomain) or <http://localhost/YOUR_SUBDOMAIN> (with a subdomain).
+Open your preferred web browser and go to this url: <http://localhost> (without subpath) or <http://localhost/YOUR_SUBPATH> (with a subpath).
