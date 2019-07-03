@@ -1,6 +1,6 @@
-# PollDLE (Polldle ~= Poll + the last part of DooDLE)
+# PollDLE (PollDLE ~= Poll + the last part of DooDLE)
 
-Voting done simply in real-time with Polldle. Polldle ~= Poll + the last part of Doo DLE (an Internet calendar tool for time management, famous for its simplification)
+Voting done simply in real-time with Polldle. PollDLE ~= Poll + the last part of Doo DLE (an Internet calendar tool for time management, famous for its simplification)
 
 Some technicals concepts in this application:
 
