@@ -1,4 +1,4 @@
-<template >
+<template>
   <div class="polldle-option-input row justify-content-center no-gutters">
     <div class="col col-auto">
       <input
@@ -12,8 +12,10 @@
       <button
         class="btn btn-outline-secondary"
         type="button"
-        @click="removePolldleOption(polldleOption)"
-      >X</button>
+        @click="removePolldleOption()"
+      >
+        X
+      </button>
     </div>
   </div>
 </template>
@@ -27,7 +29,7 @@ export default {
   },
 
   methods: {
-    removePolldleOption(polldleOption) {
+    removePolldleOption() {
     }
   }
 };

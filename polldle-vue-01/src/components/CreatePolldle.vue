@@ -1,6 +1,6 @@
-<template/>
- 
-<script/>
+<template />
+
+<script />
 
 <style>
 .large-input {

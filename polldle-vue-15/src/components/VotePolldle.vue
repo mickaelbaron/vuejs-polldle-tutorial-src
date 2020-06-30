@@ -30,7 +30,9 @@
             type="button"
             class="validate-button btn-lg btn-primary mx-auto d-block"
             @click="vote()"
-          >Vote</button>
+          >
+            Vote
+          </button>
         </div>
       </div>
     </div>
@@ -39,7 +41,9 @@
       v-show="isErrorState() || isVoteErrorState()"
       class="error-message alert alert-danger"
       role="alert"
-    >{{ errorMessage }}</div>
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 

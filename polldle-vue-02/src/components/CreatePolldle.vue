@@ -68,10 +68,10 @@ export default {
   name: "CreatePolldle",
   data() {
     return {
-      question: "",
+      question: "Aimez-vous les frites ?",
       newPolldleOptionText: "",
       polldleOptions: [],
-      errorMessage: "",
+      errorMessage: "Problem to create a new Polldle",
       buttonShown: false
     };
   },

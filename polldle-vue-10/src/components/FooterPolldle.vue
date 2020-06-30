@@ -2,7 +2,12 @@
   <div class="container">
     <!-- Mustache with description -->
     <!-- Directive v-once -->
-    <p class="footer" v-once>{{ description }}</p>
+    <p 
+      class="footer" 
+      v-once
+    >
+      {{ description }}
+    </p>
   </div>
 </template>
 

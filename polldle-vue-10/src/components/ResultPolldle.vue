@@ -8,11 +8,16 @@
         <div class="col-8">
           <!-- Instance of highcharts component -->
           <!-- Declaring Ref attribute -->
-          <highcharts/>
+          <highcharts />
         </div>
         <div class="col-4">
           <!-- Directive v-for with data -->
-          <div v-for="polldleOption in data" :key="polldleOption.name">{{polldleOption.name}}: {{polldleOption.y}}</div>
+          <div 
+            v-for="polldleOption in data" 
+            :key="polldleOption.name"
+          >
+            {{ polldleOption.name }}: {{ polldleOption.y }}
+          </div>
         </div>
       </div>
 
@@ -21,9 +26,15 @@
         <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
       </div>
     </div>
-     <!-- Directive v-else -->
-     <!-- Mustache with errorMessage -->
-    <div v-else class="error-message alert alert-danger" role="alert">{{ errorMessage }}</div>
+    <!-- Directive v-else -->
+    <!-- Mustache with errorMessage -->
+    <div 
+      v-else 
+      class="error-message alert alert-danger" 
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 

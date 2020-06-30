@@ -24,13 +24,11 @@
 export default {
   name: "CreatePolldleOption",
   data() {
-    return {
-    };
+    return {};
   },
 
   methods: {
-    removePolldleOption() {
-    }
+    removePolldleOption() {}
   }
 };
 </script>

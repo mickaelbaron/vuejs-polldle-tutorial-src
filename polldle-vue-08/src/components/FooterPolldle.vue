@@ -1,8 +1,13 @@
 <template>
   <div class="container">
-    <!-- Mustache with description -->
     <!-- Directive v-once -->
-    <p class="footer" v-once>{{ description }}</p>
+    <!-- Mustache with description -->
+    <p
+      v-once
+      class="footer"
+    >
+      {{ description }}
+    </p>
   </div>
 </template>
 

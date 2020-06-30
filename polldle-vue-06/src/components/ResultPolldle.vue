@@ -5,11 +5,15 @@
       <!-- Mustache with question -->
       <h1>{{ question }}</h1>
       <div class="row">
-        <div class="col-8">
-        </div>
+        <div class="col-8" />
         <div class="col-4">
           <!-- Directive v-for with data -->
-          <div v-for="polldleOption in data" :key="polldleOption.name">{{polldleOption.name}}: {{polldleOption.y}}</div>
+          <div
+            v-for="polldleOption in data"
+            :key="polldleOption.name"
+          >
+            {{ polldleOption.name }}: {{ polldleOption.y }}
+          </div>
         </div>
       </div>
 
@@ -18,15 +22,19 @@
         <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
       </div>
     </div>
-     <!-- Directive v-else -->
-     <!-- Mustache with errorMessage -->
-    <div v-else class="error-message alert alert-danger" role="alert">{{ errorMessage }}</div>
+    <!-- Directive v-else -->
+    <!-- Mustache with errorMessage -->
+    <div
+      v-else
+      class="error-message alert alert-danger"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-
 const stateResult = {
   RESULT: "result",
   EMPTY: "empty",

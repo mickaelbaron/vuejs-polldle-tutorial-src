@@ -1,33 +1,24 @@
 <template>
   <div class="container">
     <!-- Directive v-if with !isErrorState() -->
-    <div v-if="!isErrorState()">
+    <div>
       <!-- Mustache with question -->
       <h1>{{ question }}</h1>
       <div class="row">
-        <div class="col-8">
-          <!-- Instance of highcharts component -->
-        </div>
+        <div class="col-8" />
         <div class="col-4">
-          <!-- Directive v-for with data -->
-          <div
-            v-for="polldleOption in data"
-            :key="polldleOption.name"
-          >
-            {{ polldleOption.name }}: {{ polldleOption.y }}
-          </div>
+          <div />
         </div>
       </div>
 
       <!-- Directive v-if with isEmptyState() -->
-      <div v-if="isEmptyState()">
+      <div>
         <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
       </div>
     </div>
     <!-- Directive v-else -->
     <!-- Mustache with errorMessage -->
     <div
-      v-else
       class="error-message alert alert-danger"
       role="alert"
     >
@@ -37,10 +28,6 @@
 </template>
 
 <script>
-// Import the VueHighcharts plugin.
-
-// Use the VueHighcharts plugin.
-
 const stateResult = {
   RESULT: "result",
   EMPTY: "empty",
@@ -90,11 +77,6 @@ export default {
     options: options,
     data: []
   }),
-  // Watcher on data
-  watch: {
-    data() {
-    }
-  },
   methods: {
     isResultState() {
       return this.state === stateResult.RESULT;

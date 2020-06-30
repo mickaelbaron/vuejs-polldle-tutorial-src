@@ -33,14 +33,19 @@
       </div>
     </div>
     <!-- Directive v-show with buttonShown -->
-    <div class="row">
+    <div
+      class="row"
+      v-show="buttonShown"
+    >
       <div class="col">
         <!-- Directive v-on with clearAllPolldleOptions -->
         <button
           type="button"
           class="clear-button btn-lg btn-danger mx-auto d-block"
           @click="clearAllPolldleOptions"
-        >Clear all PollDLE Options</button>
+        >
+          Clear all PollDLE Options
+        </button>
       </div>
     </div>
 
@@ -52,7 +57,7 @@
       :key="currentPolldleOption.text"
     >
       <!-- Instance CreatePolldleOption component -->
-      <CreatePolldleOption/>
+      <CreatePolldleOption />
     </div>
 
     <!-- Button Action -->
@@ -65,12 +70,19 @@
           class="validate-button btn-lg btn-primary mx-auto d-block"
           @click="createPolldle"
           :disabled="isCreatePolldleDisabled()"
-        >Create PollDLE</button>
+        >
+          Create PollDLE
+        </button>
       </div>
     </div>
 
-    <div class="alert alert-primary" role="alert">
-      <h4 class="alert-heading">Summary of your PollDLE</h4>
+    <div 
+      class="alert alert-primary" 
+      role="alert"
+    >
+      <h4 class="alert-heading">
+        Summary of your PollDLE
+      </h4>
       <hr>
       <p>
         The question is:
@@ -90,7 +102,7 @@
       class="error-message alert alert-danger"
       role="alert"
       v-text="errorMessage"
-    ></div>
+    />
   </div>
 </template>
 
@@ -124,16 +136,9 @@ export default {
       return this.polldleOptions.length;
     }
   },
-  // Use created hook to initialize event bus
-  created() {
-    window.bus.$on("removedPolldleOption", polldleOption => {
-      let index = this.polldleOptions.indexOf(polldleOption);
-      this.polldleOptions.splice(index, 1);
-      this.errorMessage = "";
-    });
-  },
   // Use mounted hook to log the text content of the DOM
   mounted() {
+    // eslint-disable-next-line no-console
     console.log(this.$el.textContent);
   },
   methods: {

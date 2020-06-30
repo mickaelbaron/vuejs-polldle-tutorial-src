@@ -9,10 +9,10 @@
       <div class="col">
         <!-- Directive v-model with question -->
         <input
+          v-model="question"
           type="text"
           class="large-input mx-auto d-block"
           placeholder="Add your question here"
-          v-model="question"
         >
       </div>
     </div>
@@ -24,35 +24,40 @@
         <!-- Directive v-model with newPolldleOptionText -->
         <!-- Directive v-on with addPolldleOption -->
         <input
+          v-model="newPolldleOptionText"
           type="text"
           placeholder="Polldle Option"
-          v-model="newPolldleOptionText"
           class="large-input mx-auto d-block"
           @keypress.enter="addPolldleOption"
         >
       </div>
     </div>
     <!-- Directive v-show with buttonShown -->
-    <div class="row">
+    <div
+      v-show="buttonShown"
+      class="row"
+    >
       <div class="col">
         <!-- Directive v-on with clearAllPolldleOptions -->
         <button
           type="button"
           class="clear-button btn-lg btn-danger mx-auto d-block"
           @click="clearAllPolldleOptions"
-        >Clear all PollDLE Options</button>
+        >
+          Clear all PollDLE Options
+        </button>
       </div>
     </div>
 
     <!-- PollDLE option -->
     <!-- Directive v-for with polldleOptions -->
     <div
-      class="row justify-content-center"
       v-for="currentPolldleOption in polldleOptions"
       :key="currentPolldleOption.text"
+      class="row justify-content-center"
     >
       <!-- Instance of CreatePolldleOption component -->
-      <CreatePolldleOption/>
+      <CreatePolldleOption />
     </div>
 
     <!-- Button Action -->
@@ -63,14 +68,21 @@
         <button
           type="button"
           class="validate-button btn-lg btn-primary mx-auto d-block"
-          @click="createPolldle"
           :disabled="isCreatePolldleDisabled()"
-        >Create PollDLE</button>
+          @click="createPolldle"
+        >
+          Create PollDLE
+        </button>
       </div>
     </div>
 
-    <div class="alert alert-primary" role="alert">
-      <h4 class="alert-heading">Summary of your PollDLE</h4>
+    <div
+      class="alert alert-primary"
+      role="alert"
+    >
+      <h4 class="alert-heading">
+        Summary of your PollDLE
+      </h4>
       <hr>
       <p>
         The question is:
@@ -80,7 +92,7 @@
         </strong>
       </p>
       <!-- Mustache with computed property: listSize -->
-      <p>Number of PollDLE options: {{ listSize }}</p>
+      <p>Number of PollDLE options: TODO</p>
     </div>
 
     <!-- Directive v-show with errorMessage -->
@@ -90,7 +102,7 @@
       class="error-message alert alert-danger"
       role="alert"
       v-text="errorMessage"
-    ></div>
+    />
   </div>
 </template>
 
@@ -112,25 +124,14 @@ export default {
     };
   },
   // Watcher on polldleOptions
-  watch: {
-    polldleOptions() {
-      this.buttonShown =
-        this.polldleOptions != null && !(this.polldleOptions.length === 0);
-    }
-  },
   // Computed property listSize when polldleOptions changes
-  computed: {
-    listSize() {
-      return this.polldleOptions.length;
-    }
-  },
   methods: {
     removedPolldleOption(polldleOption) {
       let index = this.polldleOptions.indexOf(polldleOption);
       this.polldleOptions.splice(index, 1);
       this.errorMessage = "";
     },
-    
+
     addPolldleOption() {
       this.polldleOptions.push({
         text: this.newPolldleOptionText
