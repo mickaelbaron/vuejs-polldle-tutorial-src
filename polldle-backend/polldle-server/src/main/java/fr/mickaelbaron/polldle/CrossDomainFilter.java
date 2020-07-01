@@ -39,6 +39,6 @@ public class CrossDomainFilter implements ContainerResponseFilter {
 		cresp.getHeaders().add("Access-Control-Allow-Credentials", "true");
 		cresp.getHeaders().add("Access-Control-Allow-Methods", "GET, POST");
 		cresp.getHeaders().add("Allow", "GET, POST");
-		cresp.getHeaders().add("Access-Control-Allow-Headers", "Content-Type, Accept");
+		cresp.getHeaders().add("Access-Control-Allow-Headers", "Content-Type, Accept, authorization");
 	}
 }

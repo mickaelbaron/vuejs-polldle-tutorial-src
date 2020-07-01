@@ -126,17 +126,22 @@ export default {
     };
   },
   // Watcher on polldleOptions
-  // Computed property listSize when polldleOptions changes
   watch: {
     polldleOptions() {
       this.buttonShown =
         this.polldleOptions != null && !(this.polldleOptions.length === 0);
     }
   },
+  // Computed property listSize when polldleOptions changes
   computed: {
     listSize() {
       return this.polldleOptions.length;
     }
+  },
+  // Use mounted hook to log the text content of the DOM
+  mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.$el.textContent);
   },
   methods: {
     removedPolldleOption(polldleOption) {

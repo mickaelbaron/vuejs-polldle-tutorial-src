@@ -1,7 +1,7 @@
 <template>
   <div>
-    <router-view/>
-    <footerPolldle/>
+    <router-view />
+    <footerPolldle />
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 import footerPolldle from "@/components/FooterPolldle.vue";
 
 export default {
-  name: "app",
+  name: "App",
   components : { footerPolldle }
 };
 </script>

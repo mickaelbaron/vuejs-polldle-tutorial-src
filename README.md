@@ -4,10 +4,10 @@ Voting done simply in real-time with Polldle. PollDLE ~= Poll + the last part of
 
 Some technicals concepts in this application:
 
-* front-end in Vue.js 2.x and Vue CLI 3.y,
-* back-end in Java with MicroProfile 2.1 and KumuluzEE implementation (JAX-RS and CDI),
+* front-end in Vue.js and Vue CLI,
+* back-end in Java with MicroProfile and KumuluzEE implementation (JAX-RS and CDI),
 * using the given/when/then style for Java unit test,
-* full build with Docker,
+* full build with Docker with multi-stage build feature,
 * deployement with Docker.
 
 ## Software requirements
@@ -18,7 +18,7 @@ Some technicals concepts in this application:
 
 Polldle building and deployement have been tested on:
 
-* macOS Sierra (with Docker for Mac),
+* macOS Catalina (with Docker for Mac),
 * Linux Ubuntu.
 
 In fact, all operating systems that support Docker can build and test PollDLE.
@@ -77,10 +77,10 @@ To check if the images are been built, execute this command line:
 
 ```console
 $ docker images
-REPOSITORY                     TAG                 IMAGE ID            CREATED             SIZE
-mickaelbaron/polldle-backend   latest              890ee2940a5c        44 minutes ago      182MB
-mickaelbaron/polldle-rp        latest              8de5e344ae15        9 days ago          20.4MB
-mickaelbaron/polldle-vue       latest              5d4359c80480        9 days ago          22.1MB
+REPOSITORY                     TAG                 IMAGE ID            CREATED              SIZE
+mickaelbaron/polldle-rp        latest              7c20a2289271        27 seconds ago       21.3MB
+mickaelbaron/polldle-vue       latest              fd4edb630f77        28 seconds ago       22MB
+mickaelbaron/polldle-backend   latest              3fbc76dd4c2a        About a minute ago   165MB
 ...
 ```
 

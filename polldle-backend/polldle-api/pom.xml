@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fr.mickaelbaron</groupId>
 		<artifactId>polldle-backend</artifactId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>polldle-api</artifactId>
 	<name>poddle-api</name>

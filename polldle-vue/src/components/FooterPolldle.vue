@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <p class="footer" v-once>{{ description }}</p>
+    <p
+      class="footer"
+      v-once
+    >
+      {{ description }}
+    </p>
   </div>
 </template>
 

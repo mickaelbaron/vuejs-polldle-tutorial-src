@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import fr.mickaelbaron.polldle.entity.PolldleEntity;
 import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
@@ -13,7 +13,7 @@ import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)
  */
-@Singleton
+@ApplicationScoped
 public class InMemoryFactory {
 
 	private List<PolldleEntity> polls;

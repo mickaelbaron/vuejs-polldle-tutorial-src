@@ -29,13 +29,18 @@
         >
       </div>
     </div>
-    <div class="row" v-show="buttonShown">
+    <div
+      class="row"
+      v-show="buttonShown"
+    >
       <div class="col">
         <button
           type="button"
           class="clear-button btn-lg btn-danger mx-auto d-block"
           @click="clearAllPolldleOptions"
-        >Clear all PollDLE Options</button>
+        >
+          Clear all PollDLE Options
+        </button>
       </div>
     </div>
 
@@ -45,7 +50,10 @@
       v-for="currentPolldleOption in polldleOptions"
       :key="currentPolldleOption.text"
     >
-      <CreatePolldleOption :polldleOption="currentPolldleOption" v-on:removed-polldle-option="removedPolldleOption($event)"/>
+      <CreatePolldleOption
+        :polldle-option="currentPolldleOption"
+        @removed-polldle-option="removedPolldleOption($event)"
+      />
     </div>
 
     <!-- Button Action -->
@@ -56,12 +64,19 @@
           class="validate-button btn-lg btn-primary mx-auto d-block"
           @click="createPolldle"
           :disabled="isCreatePolldleDisabled()"
-        >Create PollDLE</button>
+        >
+          Create PollDLE
+        </button>
       </div>
     </div>
 
-    <div class="alert alert-primary" role="alert">
-      <h4 class="alert-heading">Summary of your PollDLE</h4>
+    <div
+      class="alert alert-primary"
+      role="alert"
+    >
+      <h4 class="alert-heading">
+        Summary of your PollDLE
+      </h4>
       <hr>
       <p>
         The question is:
@@ -75,7 +90,7 @@
       class="error-message alert alert-danger"
       role="alert"
       v-text="errorMessage"
-    ></div>
+    />
   </div>
 </template>
 
@@ -94,9 +109,6 @@ export default {
       buttonShown: false
     };
   },
-  mounted() {
-    console.log(this.$el.textContent);
-  },
   watch: {
     polldleOptions() {
       this.buttonShown =
@@ -107,6 +119,10 @@ export default {
     listSize() {
       return this.polldleOptions.length;
     }
+  },
+  mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.$el.textContent);
   },
   methods: {
     removedPolldleOption(polldleOption) {

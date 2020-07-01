@@ -137,6 +137,11 @@ export default {
       return this.polldleOptions.length;
     }
   },
+  // Use mounted hook to log the text content of the DOM
+  mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.$el.textContent);
+  },
   methods: {
     removedPolldleOption(polldleOption) {
       let index = this.polldleOptions.indexOf(polldleOption);

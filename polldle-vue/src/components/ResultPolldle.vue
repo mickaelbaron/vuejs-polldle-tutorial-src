@@ -4,10 +4,18 @@
       <h1>{{ question }}</h1>
       <div class="row">
         <div class="col-8">
-          <highcharts :options="options" ref="highcharts"/>
+          <highcharts
+            :options="options"
+            ref="highcharts"
+          />
         </div>
         <div class="col-4">
-          <div v-for="polldleOption in data" :key="polldleOption.name">{{polldleOption.name}}: {{polldleOption.y}}</div>
+          <div
+            v-for="polldleOption in data"
+            :key="polldleOption.name"
+          >
+            {{ polldleOption.name }}: {{ polldleOption.y }}
+          </div>
         </div>
       </div>
 
@@ -15,7 +23,13 @@
         <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
       </div>
     </div>
-    <div v-else class="error-message alert alert-danger" role="alert">{{ errorMessage }}</div>
+    <div
+      v-else
+      class="error-message alert alert-danger"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
