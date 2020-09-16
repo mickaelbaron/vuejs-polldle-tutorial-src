@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bootstrap-vue": "^2.15.0",
     "highcharts": "^8.1.2",
     "vue": "^2.6.10",
     "vue-highcharts": "^0.1.0",

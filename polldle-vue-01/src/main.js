@@ -3,8 +3,6 @@ import App from './App.vue'
 
 require('./assets/polldle.css')
 
-// Import Bootstrap library
-
 Vue.config.productionTip = false
 
 new Vue({
