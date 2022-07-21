@@ -16,7 +16,6 @@
 			<artifactId>polldle-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.kumuluz.ee</groupId>
 			<artifactId>kumuluzee-core</artifactId>
@@ -27,33 +26,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.kumuluz.ee</groupId>
-			<artifactId>kumuluzee-jax-rs-jersey</artifactId>
+			<artifactId>kumuluzee-cdi-weld</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.kumuluz.ee</groupId>
-			<artifactId>kumuluzee-cdi-weld</artifactId>
+			<artifactId>kumuluzee-jax-rs-jersey</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-core</artifactId>
-		</dependency>
-
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>org.jglue.cdi-unit</groupId>

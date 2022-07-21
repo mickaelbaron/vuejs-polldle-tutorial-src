@@ -1,4 +1,72 @@
+<script setup>
+import { ref, reactive, computed, watch } from 'vue'
+
+// Import CreatePolldleOption component
+import CreatePolldleOption from "./CreatePolldleOption.vue";
+
+const errorMessage = ref('')
+const buttonShown = ref(false)
+// Declare attribute ref
+
+const polldle = reactive({
+  question: 'Aimez-vous les frites ?',
+  polldleOptions: []
+})
+const newPolldleOptionText = ref('')
+
+// Computed property listSize when polldle.polldleOptions changes
+const listSize = computed(() => {
+  return polldle.polldleOptions.length
+})
+
+// Watcher on polldle.polldleOptions
+watch(
+  () => [...polldle.polldleOptions],
+  () => {
+    buttonShown.value = !(polldle.polldleOptions.length === 0)
+  }
+)
+
+function isCreatePolldleDisabled() {
+  return polldle.polldleOptions.length < 2 || polldle.question === ''
+}
+
+function clearAllPolldleOptions() {
+  polldle.polldleOptions = []
+  errorMessage.value = ''
+}
+
+function addPolldleOption() {
+  // Read attribute ref value
+  polldle.polldleOptions.push({
+    text: newPolldleOptionText.value
+  })
+  newPolldleOptionText.value = ''
+}
+
+function removedPolldleOption(polldleOption) {
+  let index = polldle.polldleOptions.indexOf(polldleOption)
+  polldle.polldleOptions.splice(index, 1)
+  errorMessage.value = ''
+}
+
+function createPolldle() {
+  let polldleObject = {
+    question: polldle.question,
+    polldleOptions: []
+  }
+
+  polldle.polldleOptions.forEach((element) => {
+    var newPollOptionElement = { name: element.text }
+    if (element.text !== '') {
+      polldleObject.polldleOptions.push(newPollOptionElement)
+    }
+  })
+}
+</script>
+
 <template>
+  <!-- Declaring ref attribute -->
   <div class="container">
     <!-- Titre + description -->
     <h1>PollDLE</h1>
@@ -12,8 +80,8 @@
           type="text"
           class="large-input mx-auto d-block"
           placeholder="Add your question here"
-          v-model="question"
-        >
+          v-model="polldle.question"
+        />
       </div>
     </div>
 
@@ -26,17 +94,14 @@
         <input
           type="text"
           placeholder="Polldle Option"
-          v-model="newPolldleOptionText"
           class="large-input mx-auto d-block"
+          v-model="newPolldleOptionText"
           @keypress.enter="addPolldleOption"
-        >
+        />
       </div>
     </div>
     <!-- Directive v-show with buttonShown -->
-    <div
-      class="row"
-      v-show="buttonShown"
-    >
+    <div class="row" v-show="buttonShown">
       <div class="col">
         <!-- Directive v-on with clearAllPolldleOptions -->
         <button
@@ -51,135 +116,50 @@
 
     <!-- PollDLE option -->
     <!-- Directive v-for with polldleOptions -->
-    <div
-      class="row justify-content-center"
-      v-for="currentPolldleOption in polldleOptions"
+    <div class="row justify-content-center"
+      v-for="currentPolldleOption in polldle.polldleOptions"
       :key="currentPolldleOption.text"
-    >
-      <!-- Instance of CreatePolldleOption component -->
-      <CreatePolldleOption />
+      >
+        <!-- Instance CreatePolldleOption component -->
+        <CreatePolldleOption />
     </div>
 
     <!-- Button Action -->
+    <!-- Directive v-bind with isCreatePolldleDisabled() -->
     <div class="row">
       <div class="col">
-        <!-- Directive v-bind with isCreatePolldleDisabled() -->
         <!-- Directive v-on with createPolldle -->
         <button
           type="button"
           class="validate-button btn-lg btn-primary mx-auto d-block"
-          @click="createPolldle"
           :disabled="isCreatePolldleDisabled()"
+          @click="createPolldle"
         >
           Create PollDLE
         </button>
       </div>
     </div>
 
-    <div
-      class="alert alert-primary"
-      role="alert"
-    >
-      <h4 class="alert-heading">
-        Summary of your PollDLE
-      </h4>
-      <hr>
+    <div class="alert alert-primary" role="alert">
+      <h4 class="alert-heading">Summary of your PollDLE</h4>
+      <hr />
       <p>
-        The question is:
-        <strong>
-          <!-- Mustache with question -->
-          <strong>{{ question }}</strong>
-        </strong>
+        The question is: <strong>{{ polldle.question }}</strong>
       </p>
       <!-- Mustache with computed property: listSize -->
       <p>Number of PollDLE options: {{ listSize }}</p>
     </div>
 
-    <!-- Directive v-show with errorMessage -->
     <!-- Directive v-text with errorMessage -->
+    <!-- Directive v-show with errorMessage -->
     <div
-      v-show="errorMessage !== ''"
       class="error-message alert alert-danger"
       role="alert"
       v-text="errorMessage"
-    />
+      v-show="errorMessage !== ''"
+    ></div>
   </div>
 </template>
-
-<script>
-// Import CreatePolldleOption component
-import CreatePolldleOption from "@/components/CreatePolldleOption.vue";
-
-export default {
-  name: "CreatePolldle",
-  // Add dependencies on CreatePolldleOption component
-  components: { CreatePolldleOption },
-  data() {
-    return {
-      question: "",
-      newPolldleOptionText: "",
-      polldleOptions: [],
-      errorMessage: "",
-      buttonShown: false
-    };
-  },
-  // Watcher on polldleOptions
-  watch: {
-    polldleOptions() {
-      this.buttonShown =
-        this.polldleOptions != null && !(this.polldleOptions.length === 0);
-    }
-  },
-  // Computed property listSize when polldleOptions changes
-  computed: {
-    listSize() {
-      return this.polldleOptions.length;
-    }
-  },
-  // Use mounted hook to log the text content of the DOM
-  methods: {
-    removedPolldleOption(polldleOption) {
-      let index = this.polldleOptions.indexOf(polldleOption);
-      this.polldleOptions.splice(index, 1);
-      this.errorMessage = "";
-    },
-  
-    addPolldleOption() {
-      this.polldleOptions.push({
-        text: this.newPolldleOptionText
-      });
-      this.newPolldleOptionText = "";
-    },
-
-    clearAllPolldleOptions() {
-      this.polldleOptions = [];
-      this.errorMessage = "";
-    },
-
-    createPolldle() {
-      var polldleObject = {
-        question: this.question,
-        polldleOptions: []
-      };
-
-      this.polldleOptions.forEach(element => {
-        var newPollOptionElement = { name: element.text };
-        if (element.text !== "") {
-          polldleObject.polldleOptions.push(newPollOptionElement);
-        }
-      });
-    },
-
-    isCreatePolldleDisabled() {
-      return (
-        this.polldleOptions === null ||
-        this.polldleOptions.length < 2 ||
-        this.question === ""
-      );
-    }
-  }
-};
-</script>
 
 <style>
 .large-input {

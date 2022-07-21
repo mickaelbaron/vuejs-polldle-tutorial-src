@@ -10,7 +10,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import fr.mickaelbaron.polldle.model.Polldle;
@@ -34,11 +33,12 @@ public interface PolldlesResource {
 	/**
 	 * Retrieve a poll to prepare to vote.
 	 * 
-	 * @param customPathURL
+	 * @param pathURL
 	 * @return
 	 */
 	@GET
-	Polldle getPolldleByPathURL(@QueryParam(PATH_URL) String customPathURL);
+	@Path("{" + PATH_URL + "}")
+	Polldle getPolldleByPathURL(@PathParam(PATH_URL) String pathURL);
 
 	/**
 	 * @param pathUrl

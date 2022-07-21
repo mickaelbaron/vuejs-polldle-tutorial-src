@@ -20,6 +20,9 @@ public class PolldleOption {
 	 */
 	private boolean isDestroyed;
 
+	public PolldleOption() {
+	}
+	
 	public Byte getId() {
 		return id;
 	}

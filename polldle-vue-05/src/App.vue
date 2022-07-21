@@ -1,19 +1,11 @@
-<template>
-  <div>
-    <createPolldle />
-    <footerPolldle />
-  </div>
-</template>
-
-<script>
-import footerPolldle from "@/components/FooterPolldle.vue";
-import createPolldle from "@/components/CreatePolldle.vue";
-
-export default {
-  name: "App",
-  components: { footerPolldle, createPolldle }
-};
+<script setup>
+import FooterPolldle from './components/FooterPolldle.vue'
+import CreatePolldle from './components/CreatePolldle.vue'
 </script>
 
-<style>
-</style>
+<template>
+  <CreatePolldle />
+  <FooterPolldle />
+</template>
+
+<style></style>

@@ -1,19 +1,13 @@
-<template>
-  <div>
-    <!-- Add router-view component -->
-    <router-view />
-    <footerPolldle />
-  </div>
-</template>
-
-<script>
-import footerPolldle from "@/components/FooterPolldle.vue";
-
-export default {
-  name: "App",
-  components: { footerPolldle }
-};
+<script setup>
+import FooterPolldle from './components/FooterPolldle.vue'
+// Import RouterView component
+import { RouterView } from 'vue-router'
 </script>
 
-<style>
-</style>
+<template>
+  <!-- Add RouterView component -->
+  <RouterView />
+  <FooterPolldle />
+</template>
+
+<style></style>

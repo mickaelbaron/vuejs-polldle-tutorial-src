@@ -2,11 +2,13 @@ FROM node:lts-alpine as build-npm-stage
 LABEL maintainer="Mickael BARON"
 
 WORKDIR /polldle-vue
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
+COPY index.html ./
 COPY public ./public
 COPY src ./src
 COPY .env.production ./
+COPY vite.config.js ./
 
 RUN npm run build
 

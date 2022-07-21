@@ -1,12 +1,55 @@
+<script setup>
+import { ref, reactive } from 'vue'
+
+// Import AXIOS JavaScript library
+
+const stateResult = {
+  WAITING_VOTE: 'waiting_vote',
+  VOTE_ERROR: 'vote_error',
+  ERROR: 'error'
+}
+
+const polldle = reactive({
+  question: '',
+  polldleOptions: [],
+  polldleOptionResponses: []
+})
+
+const state = ref(null)
+const errorMessage = ref('')
+
+// To retrieve PollDLE information from REST web service
+
+function vote() {
+  if (!isWaitingVoteState()) {
+    return
+  }
+
+  // To vote for a PollDLE from REST web service
+}
+
+function isErrorState() {
+  return state.value === stateResult.ERROR
+}
+
+function isWaitingVoteState() {
+  return state.value === stateResult.WAITING_VOTE
+}
+
+function isVoteErrorState() {
+  return state.value === stateResult.VOTE_ERROR
+}
+</script>
+
 <template>
   <div class="container">
     <div v-if="!isErrorState()">
-      <h1>{{ question }}</h1>
+      <h1>{{ polldle.question }}</h1>
 
       <form>
         <div
           class="row justify-content-md-center"
-          v-for="polldleOption in polldleOptions"
+          v-for="polldleOption in polldle.polldleOptions"
           :key="polldleOption.key"
         >
           <div class="col-4">
@@ -14,9 +57,9 @@
               <label>
                 <input
                   type="radio"
-                  v-model="polldleOptionResponses"
+                  v-model="polldle.polldleOptionResponses"
                   :value="polldleOption.id.toString()"
-                >
+                />
                 {{ polldleOption.name }}
               </label>
             </div>
@@ -47,51 +90,4 @@
   </div>
 </template>
 
-<script>
-// Add dependency to AXIO JavaScript library
-
-const stateResult = {
-  WAITING_VOTE: "waiting_vote",
-  VOTE_ERROR: "vote_error",
-  ERROR: "error"
-};
-
-export default {
-  name: "VotePolldle",
-  data() {
-    return {
-      state: null,
-      errorMessage: "",
-      question: "",
-      polldleOptions: [],
-      polldleOptionResponses: null
-    };
-  },
-  created() {
-    // To retrieve PollDLE information from REST web service
-  },
-  methods: {
-    vote() {
-      // Prepare the data.
-      var polldleVote = {
-        pathUrl: this.$route.params.pathurl,
-        polldleOptionResponses: [this.polldleOptionResponses]
-      };
-
-      // To vote for a PollDLE from REST web service
-    },
-    isWaitingVoteState() {
-      return this.state === stateResult.WAITING_VOTE;
-    },
-    isVoteErrorState() {
-      return this.state === stateResult.VOTE_ERROR;
-    },
-    isErrorState() {
-      return this.state === stateResult.ERROR;
-    }
-  }
-};
-</script>
-
-<style>
-</style>
+<style></style>

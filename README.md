@@ -4,7 +4,7 @@ Voting done simply in real-time with Polldle. PollDLE ~= Poll + the last part of
 
 Some technicals concepts in this application:
 
-* front-end in Vue.js and Vue CLI,
+* front-end in Vue.js 3 and Vite,
 * back-end in Java with MicroProfile and KumuluzEE implementation (JAX-RS and CDI),
 * using the given/when/then style for Java unit test,
 * full build with Docker with multi-stage build feature,
@@ -20,7 +20,7 @@ Some technicals concepts in this application:
 
 Polldle building and deployement have been tested on:
 
-* macOS Catalina (with Docker for Mac),
+* macOS Monterey (with Docker for Mac),
 * Linux Ubuntu.
 
 In fact, all operating systems that support Docker can build and test PollDLE.
@@ -30,7 +30,7 @@ In fact, all operating systems that support Docker can build and test PollDLE.
 Clone the latest development source:
 
 ```console
-git clone https://github.com/mickaelbaron/vuejs-polldle-tutorial-src
+$ git clone https://github.com/mickaelbaron/vuejs-polldle-tutorial-src
 ```
 
 ## Configure
@@ -66,24 +66,23 @@ server {
 To build without subpath: <https://localhost>, execute this command line:
 
 ```console
-docker-compose build --build-arg script_name=build
+$ docker compose build --build-arg script_name=build
 ```
 
 To build with subpath: <http://localhost/YOUR_SUBPATH>, execute this command line:
 
 ```console
-docker-compose build  --build-arg script_name=subpath
+$ docker compose build  --build-arg script_name=subpath
 ```
 
 To check if the images are been built, execute this command line:
 
 ```console
-$ docker images
-REPOSITORY                     TAG                 IMAGE ID            CREATED              SIZE
-mickaelbaron/polldle-rp        latest              7c20a2289271        27 seconds ago       21.3MB
-mickaelbaron/polldle-vue       latest              fd4edb630f77        28 seconds ago       22MB
-mickaelbaron/polldle-backend   latest              3fbc76dd4c2a        About a minute ago   165MB
-...
+$ docker compose ps
+NAME                                     COMMAND                  SERVICE             STATUS              PORTS
+vuejs3-polldle-tutorial-src-backend-1    "java -cp /polldle/c…"   backend             running             0.0.0.0:9991->9991/tcp
+vuejs3-polldle-tutorial-src-frontend-1   "nginx -g 'daemon of…"   frontend            running             80/tcp
+vuejs3-polldle-tutorial-src-rp-1         "/docker-entrypoint.…"   rp                  running             0.0.0.0:80->80/tcp
 ```
 
 ## Run
@@ -91,7 +90,7 @@ mickaelbaron/polldle-backend   latest              3fbc76dd4c2a        About a m
 From the root of the project, execute this command line:
 
 ```console
-docker-compose up -d
+$ docker compose up -d
 ```
 
-Open your preferred web browser and go to this url: <http://localhost> (without subpath) or <http://localhost/YOUR_SUBPATH> (with a subpath).
+Open your favorite web browser and go to this url: <http://localhost> (without subpath) or <http://localhost/YOUR_SUBPATH> (with a subpath).

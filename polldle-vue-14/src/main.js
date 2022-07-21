@@ -1,12 +1,14 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 // Import routing configuration
+import './assets/polldle.css'
 
-require('./assets/polldle.css')
+const app = createApp(App)
 
-Vue.config.productionTip = false
+// Global Registration of CreatePolldleOption component
+//import CreatePolldleOption from './components/CreatePolldleOption.vue'
+//app.component('CreatePolldleOption', CreatePolldleOption)
 
-new Vue({
-  // Enable routing
-  render: h => h(App)
-}).$mount('#app')
+// Enable routing
+
+app.mount('#app')

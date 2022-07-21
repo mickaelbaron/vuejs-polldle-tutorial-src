@@ -1,3 +1,12 @@
+<script setup>
+defineProps({
+  polldleOption: {
+    type: Object,
+    required: true
+  }
+})
+</script>
+
 <template>
   <div class="polldle-option-input row justify-content-center no-gutters">
     <div class="col col-auto">
@@ -7,40 +16,19 @@
         readonly
         :value="polldleOption.text"
         :title="polldleOption.text"
-      >
+      />
     </div>
     <div class="col col-auto">
       <button
         class="btn btn-outline-secondary"
         type="button"
-        @click="removePolldleOption(polldleOption)"
+        @click="$emit('removed-polldle-option', polldleOption)"
       >
         X
       </button>
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "CreatePolldleOption",
-  data() {
-    return {};
-  },
-
-  methods: {
-    removePolldleOption(polldleOption) {
-      this.$emit("removed-polldle-option", polldleOption);
-    }
-  },
-  props: {
-    polldleOption: {
-      type: Object,
-      required: true
-    }
-  }
-};
-</script>
 
 <style>
 .polldle-option-input {

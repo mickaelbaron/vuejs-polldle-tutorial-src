@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
   <div class="polldle-option-input row justify-content-center no-gutters">
     <div class="col col-auto">
@@ -5,35 +8,13 @@
         type="text"
         class="form-control"
         readonly
-      >
+      />
     </div>
     <div class="col col-auto">
-      <!-- Directive v-on with removePolldleOption -->
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        @click="removePolldleOption()"
-      >
-        X
-      </button>
+      <button class="btn btn-outline-secondary" type="button">X</button>
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "CreatePolldleOption",
-  data() {
-    return {
-    };
-  },
-
-  methods: {
-    removePolldleOption() {
-    }
-  }
-};
-</script>
 
 <style>
 .polldle-option-input {

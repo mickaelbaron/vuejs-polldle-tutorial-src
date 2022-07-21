@@ -1,51 +1,31 @@
 {
   "name": "polldle-vue",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "subpath": "vue-cli-service build --mode subpath",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore",
+    "subpath": "vite build --mode subpath"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "highcharts": "^8.1.2",
-    "vue": "^2.6.10",
-    "vue-highcharts": "^0.1.0",
-    "vue-router": "^3.3.4"
+    "axios": "^0.27.2",
+    "highcharts-vue": "^1.4.0",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "vue-template-compiler": "^2.6.11"
+    "@vitejs/plugin-vue": "^3.0.0",
+    "vite": "^3.0.0",
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "eslint": "^8.5.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "prettier": "^2.5.1"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/strongly-recommended",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "none"
+  }
 }

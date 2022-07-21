@@ -33,9 +33,12 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class CrossDomainFilter implements ContainerResponseFilter {
 
+	public CrossDomainFilter() {
+	}
+	
 	@Override
 	public void filter(ContainerRequestContext requestContext, ContainerResponseContext cresp) throws IOException {
-		cresp.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:8080");
+		cresp.getHeaders().add("Access-Control-Allow-Origin", "*");
 		cresp.getHeaders().add("Access-Control-Allow-Credentials", "true");
 		cresp.getHeaders().add("Access-Control-Allow-Methods", "GET, POST");
 		cresp.getHeaders().add("Allow", "GET, POST");

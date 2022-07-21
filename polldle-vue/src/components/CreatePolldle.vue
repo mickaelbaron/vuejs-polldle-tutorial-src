@@ -1,5 +1,110 @@
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onBeforeMount } from 'vue'
+import { useRouter } from 'vue-router'
+
+import CreatePolldleOption from './CreatePolldleOption.vue'
+
+const errorMessage = ref('')
+const buttonShown = ref(false)
+const el = ref()
+
+const polldle = reactive({
+  question: '',
+  polldleOptions: []
+})
+
+const newPolldleOptionText = ref('')
+
+const router = useRouter()
+
+watch(
+  () => [...polldle.polldleOptions],
+  () => {
+    buttonShown.value = !(polldle.polldleOptions.length === 0)
+  }
+)
+
+const listSize = computed(() => {
+  return polldle.polldleOptions.length
+})
+
+onBeforeMount(() => {
+  console.log('onBeforeMount:' + el.value)
+})
+
+onMounted(() => {
+  console.log('onMounted:' + el.value)
+})
+
+function isCreatePolldleDisabled() {
+  return polldle.polldleOptions.length < 2 || polldle.question === ''
+}
+
+function clearAllPolldleOptions() {
+  polldle.polldleOptions = []
+  errorMessage.value = ''
+}
+
+function addPolldleOption() {
+  console.log('Root element:' + el.value.innerHTML)
+
+  polldle.polldleOptions.push({
+    text: newPolldleOptionText.value
+  })
+  newPolldleOptionText.value = ''
+}
+
+function removedPolldleOption(polldleOption) {
+  let index = polldle.polldleOptions.indexOf(polldleOption)
+  polldle.polldleOptions.splice(index, 1)
+  errorMessage.value = ''
+}
+
+function createPolldle() {
+  let polldleObject = {
+    question: polldle.question,
+    polldleOptions: []
+  }
+
+  polldle.polldleOptions.forEach((element) => {
+    var newPollOptionElement = { name: element.text }
+    if (element.text !== '') {
+      polldleObject.polldleOptions.push(newPollOptionElement)
+    }
+  })
+
+  let request = new Request(import.meta.env.VITE_APP_SERVER_URL + '/polldles', {
+    method: 'POST',
+    body: JSON.stringify(polldleObject),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  fetch(request)
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        errorMessage.value = 'Problem to create a new Polldle.'
+      }
+    })
+    .then((data) => {
+      router.push({
+        name: 'VotePolldle',
+        params: { pathurl: data.pathUrl }
+      })
+    })
+    .catch((error) => {
+      console.error(error)
+
+      errorMessage.value = 'Problem to create a new Polldle.'
+    })
+}
+</script>
+
 <template>
-  <div class="container">
+  <div ref="el" class="container">
     <!-- Titre + description -->
     <h1>PollDLE</h1>
     <h2>Voting done simply in real-time</h2>
@@ -11,8 +116,8 @@
           type="text"
           class="large-input mx-auto d-block"
           placeholder="Add your question here"
-          v-model="question"
-        >
+          v-model="polldle.question"
+        />
       </div>
     </div>
 
@@ -23,16 +128,13 @@
         <input
           type="text"
           placeholder="Polldle Option"
-          v-model="newPolldleOptionText"
           class="large-input mx-auto d-block"
+          v-model="newPolldleOptionText"
           @keypress.enter="addPolldleOption"
-        >
+        />
       </div>
     </div>
-    <div
-      class="row"
-      v-show="buttonShown"
-    >
+    <div class="row" v-show="buttonShown">
       <div class="col">
         <button
           type="button"
@@ -47,12 +149,12 @@
     <!-- PollDLE option -->
     <div
       class="row justify-content-center"
-      v-for="currentPolldleOption in polldleOptions"
+      v-for="currentPolldleOption in polldle.polldleOptions"
       :key="currentPolldleOption.text"
     >
       <CreatePolldleOption
         :polldle-option="currentPolldleOption"
-        @removed-polldle-option="removedPolldleOption($event)"
+        @removed-polldle-option="removedPolldleOption"
       />
     </div>
 
@@ -62,25 +164,19 @@
         <button
           type="button"
           class="validate-button btn-lg btn-primary mx-auto d-block"
-          @click="createPolldle"
           :disabled="isCreatePolldleDisabled()"
+          @click="createPolldle"
         >
           Create PollDLE
         </button>
       </div>
     </div>
 
-    <div
-      class="alert alert-primary"
-      role="alert"
-    >
-      <h4 class="alert-heading">
-        Summary of your PollDLE
-      </h4>
-      <hr>
+    <div class="alert alert-primary" role="alert">
+      <h4 class="alert-heading">Summary of your PollDLE</h4>
+      <hr />
       <p>
-        The question is:
-        <strong>{{ question }}</strong>
+        The question is: <strong>{{ polldle.question }}</strong>
       </p>
       <p>Number of PollDLE options: {{ listSize }}</p>
     </div>
@@ -90,108 +186,9 @@
       class="error-message alert alert-danger"
       role="alert"
       v-text="errorMessage"
-    />
+    ></div>
   </div>
 </template>
-
-<script>
-import CreatePolldleOption from "@/components/CreatePolldleOption.vue";
-
-export default {
-  name: "CreatePolldle",
-  components: { CreatePolldleOption },
-  data() {
-    return {
-      question: "",
-      newPolldleOptionText: "",
-      polldleOptions: [],
-      errorMessage: "",
-      buttonShown: false
-    };
-  },
-  watch: {
-    polldleOptions() {
-      this.buttonShown =
-        this.polldleOptions != null && !(this.polldleOptions.length === 0);
-    }
-  },
-  computed: {
-    listSize() {
-      return this.polldleOptions.length;
-    }
-  },
-  mounted() {
-    // eslint-disable-next-line no-console
-    console.log(this.$el.textContent);
-  },
-  methods: {
-    removedPolldleOption(polldleOption) {
-      let index = this.polldleOptions.indexOf(polldleOption);
-      this.polldleOptions.splice(index, 1);
-      this.errorMessage = "";
-    },
-    
-    addPolldleOption() {
-      this.polldleOptions.push({
-        text: this.newPolldleOptionText
-      });
-      this.newPolldleOptionText = "";
-    },
-
-    clearAllPolldleOptions() {
-      this.polldleOptions = [];
-      this.errorMessage = "";
-    },
-
-    createPolldle() {
-      var polldleObject = {
-        question: this.question,
-        polldleOptions: []
-      };
-
-      this.polldleOptions.forEach(element => {
-        var newPollOptionElement = { name: element.text };
-        if (element.text !== "") {
-          polldleObject.polldleOptions.push(newPollOptionElement);
-        }
-      });
-
-      var request = new Request(process.env.VUE_APP_SERVER_URL + "/polldles", {
-        method: "POST",
-        body: JSON.stringify(polldleObject),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-
-      fetch(request).then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          this.errorMessage = "Problem to create a new Polldle.";
-        }
-      }).then(data => {
-        console.log(data.pathUrl);
-        this.$router.push({
-          name: "VotePolldle",
-          params: { pathurl: data.pathUrl }
-        });
-      }).catch((error) => {
-        this.errorMessage = "Problem to create a new Polldle.";
-        console.error(error);
-      });
-    },
-
-    isCreatePolldleDisabled() {
-      return (
-        this.polldleOptions === null ||
-        this.polldleOptions.length < 2 ||
-        this.question === ""
-      );
-    }
-  }
-};
-</script>
 
 <style>
 .large-input {

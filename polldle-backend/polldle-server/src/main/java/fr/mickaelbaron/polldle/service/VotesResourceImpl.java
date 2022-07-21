@@ -110,7 +110,7 @@ public class VotesResourceImpl implements VotesResource {
 		}
 
 		// Get Poll from pathURL value.
-		final Optional<PolldleEntity> pollByPathURL = pollDAO.getPolldleByPathURL(response.getPathUrl());
+		final Optional<PolldleEntity> pollByPathURL = pollDAO.getPolldleByPathURL(pathURL);
 
 		if (!pollByPathURL.isPresent()) {
 			throw new WebApplicationException("No Polldle with this path URL.", Status.BAD_REQUEST);
@@ -132,22 +132,22 @@ public class VotesResourceImpl implements VotesResource {
 			// Split by 'ApiCookies.POLLDLE_VOTE_SEPARATOR' and check if there exists the
 			// current path.
 			if (Arrays.stream(cookie.getValue().split(String.valueOf(ApiCookies.POLLDLE_VOTE_SEPARATOR)))
-					.filter(item -> item.equals(response.getPathUrl())).count() != 0) {
+					.filter(item -> item.equals(pathURL)).count() != 0) {
 				// Already Voted.
 				throw new WebApplicationException("Still voted.", Status.NO_CONTENT);
 			} else {
 				newCookie = new NewCookie(ApiCookies.POLLDLE_VOTE,
-						cookie.getValue() + ApiCookies.POLLDLE_VOTE_SEPARATOR + response.getPathUrl());
+						cookie.getValue() + ApiCookies.POLLDLE_VOTE_SEPARATOR + pathURL);
 			}
 		} else {
-			newCookie = new NewCookie(ApiCookies.POLLDLE_VOTE, response.getPathUrl());
+			newCookie = new NewCookie(ApiCookies.POLLDLE_VOTE, pathURL);
 		}
 
 		// Store the vote.
-		voteDAO.createVote(response.getPathUrl(), newPollVoteDB);
+		voteDAO.createVote(pathURL, newPollVoteDB);
 
 		// Notify.
-		SseBroadcaster sseBroadcaster = VotesResourceImpl.broadcasters.get(response.getPathUrl());
+		SseBroadcaster sseBroadcaster = VotesResourceImpl.broadcasters.get(pathURL);
 		if (sseBroadcaster != null) {
 			PolldleResult internalPolldleResult = this.getInternalPolldleResult();
 			OutboundSseEvent build = sse.newEventBuilder().name(SSE_NAME_EVENT)

@@ -1,14 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
-import CreatePolldle from '@/components/CreatePolldle'
-import VotePolldle from '@/components/VotePolldle'
-import ResultPolldle from '@/components/ResultPolldle'
+import CreatePolldle from '../components/CreatePolldle.vue'
+import VotePolldle from '../components/VotePolldle.vue'
+import ResultPolldle from '../components/ResultPolldle.vue'
 
-Vue.use(Router)
-
-export default new Router({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -28,3 +25,4 @@ export default new Router({
   ]
 })
 
+export default router

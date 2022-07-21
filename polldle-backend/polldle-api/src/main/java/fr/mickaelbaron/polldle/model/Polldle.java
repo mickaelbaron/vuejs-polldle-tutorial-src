@@ -41,7 +41,7 @@ public class Polldle {
 	}
 
 	public List<PolldleOption> getPolldleOptions() {
-		return polldleOptions;
+		return this.polldleOptions;
 	}
 
 	public void setPollOptions(List<PolldleOption> polldleOptions) {
@@ -105,5 +105,11 @@ public class Polldle {
 
 	public void setPathUrl(String pathUrl) {
 		this.pathUrl = pathUrl;
+	}
+	
+	@Override
+	public String toString() {
+		return "Polldle [question=" + question + ", polldleOptions=" + polldleOptions + ", key=" + key + ", pathUrl="
+				+ pathUrl + "]";
 	}
 }

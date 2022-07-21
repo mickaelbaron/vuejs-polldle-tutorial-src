@@ -1,12 +1,104 @@
+<script setup>
+import { ref, reactive } from 'vue'
+// Import useRouter and useRoute
+
+// Import AXIOS JavaScript library
+import axios from 'axios';
+
+const stateResult = {
+  WAITING_VOTE: 'waiting_vote',
+  VOTE_ERROR: 'vote_error',
+  ERROR: 'error'
+}
+
+const polldle = reactive({
+  question: '',
+  polldleOptions: [],
+  polldleOptionResponses: []
+})
+
+const state = ref(null)
+const errorMessage = ref('')
+
+// Declare useRouter and userRoute objects
+
+// To retrieve PollDLE information from REST web service
+axios
+  .get('http://127.0.0.1:9991/polldles/1')
+  .then((response) => {
+    if (response.status === 200) {
+      polldle.question = response.data.question
+      polldle.polldleOptions = response.data.polldleOptions
+
+      state.value = stateResult.WAITING_VOTE
+    } else {
+      errorMessage.value = 'Polldle can not be loaded.'
+      state.value = stateResult.ERROR
+    }
+  })
+  .catch((error) => {
+    console.error(error)
+
+    errorMessage.value = 'Polldle can not be loaded.'
+    state.value = stateResult.ERROR
+  })
+
+function vote() {
+  if (!isWaitingVoteState()) {
+    return
+  }
+
+  // To vote for a PollDLE from REST web service
+  axios({
+    method: 'post',
+    baseURL: 'http://127.0.0.1:9991/polldles/1/votes',
+    data: JSON.stringify({
+      polldleOptionResponses: [polldle.polldleOptionResponses]
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        console.log('Voted!')
+
+        // Programmatic navigation to display ResultPolldle component
+      } else if (response.status === 204) {
+        state.value = stateResult.VOTE_ERROR
+        errorMessage.value = 'Already voted!'
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+
+      state.value = stateResult.VOTE_ERROR
+      errorMessage.value = 'Problem to vote for this Polldle.'
+    })
+}
+
+function isErrorState() {
+  return state.value === stateResult.ERROR
+}
+
+function isWaitingVoteState() {
+  return state.value === stateResult.WAITING_VOTE
+}
+
+function isVoteErrorState() {
+  return state.value === stateResult.VOTE_ERROR
+}
+</script>
+
 <template>
   <div class="container">
     <div v-if="!isErrorState()">
-      <h1>{{ question }}</h1>
+      <h1>{{ polldle.question }}</h1>
 
       <form>
         <div
           class="row justify-content-md-center"
-          v-for="polldleOption in polldleOptions"
+          v-for="polldleOption in polldle.polldleOptions"
           :key="polldleOption.key"
         >
           <div class="col-4">
@@ -14,9 +106,9 @@
               <label>
                 <input
                   type="radio"
-                  v-model="polldleOptionResponses"
+                  v-model="polldle.polldleOptionResponses"
                   :value="polldleOption.id.toString()"
-                >
+                />
                 {{ polldleOption.name }}
               </label>
             </div>
@@ -47,89 +139,4 @@
   </div>
 </template>
 
-<script>
-// Add dependency to AXIO JavaScript library
-import axios from 'axios';
-
-const stateResult = {
-  WAITING_VOTE: "waiting_vote",
-  VOTE_ERROR: "vote_error",
-  ERROR: "error"
-};
-
-export default {
-  name: "VotePolldle",
-  data() {
-    return {
-      state: null,
-      errorMessage: "",
-      question: "",
-      polldleOptions: [],
-      polldleOptionResponses: null
-    };
-  },
-  created() {
-    // To retrieve PollDLE information from REST web service
-    axios.get("http://127.0.0.1:9991" + "/polldles", {
-      params : {
-        pathURL: this.$route.params.pathurl
-      }
-    }).then(response => {
-      if (response.status === 200) {
-        this.question = response.data.question;
-        this.polldleOptions = response.data.polldleOptions;
-        this.state = stateResult.WAITING_VOTE;
-      } else {
-        this.errorMessage = "Polldle can not be loaded.";
-        this.state = stateResult.ERROR;
-      }  
-    }).catch(error => {
-      this.errorMessage = "Polldle can not be loaded.";
-      this.state = stateResult.ERROR;
-      console.error(error);
-    });
-  },
-  methods: {
-    vote() {
-      // Prepare the data
-      var polldleVote = {
-        pathUrl: this.$route.params.pathurl,
-        polldleOptionResponses: [this.polldleOptionResponses]
-      };
-
-      // To vote for a PollDLE from REST web service
-      axios({
-        method: 'post',
-        baseURL: "http://127.0.0.1:9991" + "/polldles/" + this.$route.params.pathurl + "/votes",
-        data: JSON.stringify(polldleVote),
-        headers: { 
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          console.log(this.$route.params.pathurl);
-          // Programmatic navigation to display ResultPolldle component
-        } else if (response.status === 204) {
-          this.state = stateResult.VOTE_ERROR;
-          this.errorMessage = "Already voted !!!";
-        }
-      }).catch(() => {
-        this.state = stateResult.VOTE_ERROR;
-        this.errorMessage = "Problem to vote for this Polldle.";
-      });
-    },
-    isWaitingVoteState() {
-      return this.state === stateResult.WAITING_VOTE;
-    },
-    isVoteErrorState() {
-      return this.state === stateResult.VOTE_ERROR;
-    },
-    isErrorState() {
-      return this.state === stateResult.ERROR;
-    }
-  }
-};
-</script>
-
-<style>
-</style>
+<style></style>

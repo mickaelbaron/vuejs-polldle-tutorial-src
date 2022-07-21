@@ -1,71 +1,28 @@
-<template>
-  <div class="container">
-    <!-- Directive v-if with !isErrorState() -->
-    <div v-if="!isErrorState()">
-      <!-- Mustache with question -->
-      <h1>{{ question }}</h1>
-      <div class="row">
-        <div class="col-8">
-          <!-- Instance of highcharts component -->
-          <!-- Declaring Ref attribute -->
-          <highcharts
-            :options="options"
-            ref="highcharts"
-          />
-        </div>
-        <div class="col-4">
-          <!-- Directive v-for with data -->
-          <div
-            v-for="polldleOption in data"
-            :key="polldleOption.name"
-          >
-            {{ polldleOption.name }}: {{ polldleOption.y }}
-          </div>
-        </div>
-      </div>
+<script setup>
+import { ref } from 'vue'
 
-      <!-- Directive v-if with isEmptyState() -->
-      <div v-if="isEmptyState()">
-        <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
-      </div>
-    </div>
-    <!-- Directive v-else -->
-    <!-- Mustache with errorMessage -->
-    <div
-      v-else
-      class="error-message alert alert-danger"
-      role="alert"
-    >
-      {{ errorMessage }}
-    </div>
-  </div>
-</template>
-
-<script>
-import capitalizeFirstLetter from "./utils.js";
-// Import the VueHighcharts plugin
-import VueHighcharts from "vue-highcharts";
-
-// Use the VueHighcharts plugin
-import Vue from "vue";
-Vue.use(VueHighcharts);
+// Import the Highcharts-Vue plugin
+import { Chart } from 'highcharts-vue'
 
 const stateResult = {
-  RESULT: "result",
-  EMPTY: "empty",
-  ERROR: "error"
-};
+  RESULT: 'result',
+  EMPTY: 'empty',
+  ERROR: 'error'
+}
 
-var options = {
+const chartOptions = {
   chart: {
     plotBackgroundColor: null,
     plotBorderWidth: null,
     plotShadow: false,
-    type: "pie",
+    type: 'pie',
     animation: false
   },
+  accessibility: {
+    enabled: false
+  },
   title: {
-    text: null
+    text: ' '
   },
   plotOptions: {
     series: {
@@ -81,93 +38,74 @@ var options = {
   },
   series: [
     {
-      name: "Vote",
+      name: 'Vote',
       colorByPoint: true,
       data: []
     }
   ],
   loading: false
-};
+}
 
-export default {
-  name: "ResultPolldle",
-  data: () => ({
-    total: 0,
-    state: null,
-    question: "",
-    errorMessage: "",
-    options: options,
-    data: []
-  }),
-  // Watcher on data
-  watch: {
-    data() {
-      // Use reference on hightcharts component
-      var chart = this.$refs.highcharts.chart;
-      chart.series[0].update(
-        {
-          data: this.data
-        },
-        true
-      );
-    }
-  },
-  // Use created hook to initialize EventSource object
-  created() {
-    var source = new EventSource(
-      "http://127.0.0.1:9991" +
-      "/polldles/" +
-      this.$route.params.pathurl +
-      "/votes/sse"
-    );
+const question = ref('')
+const state = ref(null)
+const errorMessage = ref('')
+const options = ref(chartOptions)
 
-    source.addEventListener(
-      "update-polldleresult",
-      e => {
-        var result = JSON.parse(e.data);
-        this.options.title.text = "  ";
-        this.question = capitalizeFirstLetter(result.question);
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
 
-        this.data = result.results.map(val => ({
-          name: val.name,
-          y: val.counter
-        }));
+function isResultState() {
+  return state.value === stateResult.RESULT
+}
 
-        this.total = result.results
-          .map(val => val.counter)
-          .reduce((partial_sum, a) => partial_sum + a);
+function isErrorState() {
+  return state.value === stateResult.ERROR
+}
 
-        if (this.total > 0) {
-          this.state = stateResult.RESULT;
-        } else {
-          this.state = stateResult.EMPTY;
-        }
-
-        this.options.series[0].data = this.data;
-      },
-      false
-    );
-
-    source.onerror = () => {
-      this.state = stateResult.ERROR;
-      this.errorMessage = "Problem to retrieve Polldle result.";
-    };
-  },
-  methods: {
-    isResultState() {
-      return this.state === stateResult.RESULT;
-    },
-
-    isEmptyState() {
-      return this.state === stateResult.EMPTY;
-    },
-
-    isErrorState() {
-      return this.state === stateResult.ERROR;
-    }
-  }
-};
+function isEmptyState() {
+  return state.value === stateResult.EMPTY
+}
 </script>
 
-<style>
-</style>
+<template>
+  <div class="container">
+    <!-- Directive v-if with isResultState() -->
+    <div v-if="isResultState()">
+      <!-- Mustache with question -->
+      <h1>{{ question }}</h1>
+      <div class="row">
+        <div class="col-8">
+          <!-- Instance of highcharts component -->
+          <Chart :options="options"></Chart>
+        </div>
+        <div class="col-4">
+          <!-- Directive v-for with data -->
+          <div
+            v-for="polldleOption in options.series[0].data"
+            :key="polldleOption.name"
+          >
+            {{ polldleOption.name }}: {{ polldleOption.y }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Directive v-else-if with isEmptyState() -->
+    <div v-else-if="isEmptyState()">
+      <h2>
+        No vote at this moment, keep in touch.<br />Results update in real-time.
+      </h2>
+    </div>
+    <!-- Directive v-else-if with isErrorState() -->
+    <!-- Mustache with errorMessage -->
+    <div 
+      v-else-if="isErrorState()"
+      class="error-message alert alert-danger" 
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
+
+<style></style>

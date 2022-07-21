@@ -1,3 +1,53 @@
+<script setup>
+import { ref, reactive } from 'vue'
+
+// Import CreatePolldleOption component
+
+const errorMessage = ref('Problem to create a new Polldle')
+const buttonShown = ref(false)
+const polldle = reactive({
+  question: 'Aimez-vous les frites ?',
+  polldleOptions: []
+})
+const newPolldleOptionText = ref('')
+
+function isCreatePolldleDisabled() {
+  return polldle.polldleOptions.length < 2 || polldle.question === ''
+}
+
+function clearAllPolldleOptions() {
+  polldle.polldleOptions = []
+  errorMessage.value = ''
+}
+
+function addPolldleOption() {
+  polldle.polldleOptions.push({
+    text: newPolldleOptionText.value
+  })
+  newPolldleOptionText.value = ''
+}
+
+function removedPolldleOption(polldleOption) {
+  let index = polldle.polldleOptions.indexOf(polldleOption)
+  polldle.polldleOptions.splice(index, 1)
+  errorMessage.value = ''
+}
+
+function createPolldle() {
+  let polldleObject = {
+    question: polldle.question,
+    polldleOptions: []
+  }
+
+  polldle.polldleOptions.forEach((element) => {
+    var newPollOptionElement = { name: element.text }
+    if (element.text !== '') {
+      polldleObject.polldleOptions.push(newPollOptionElement)
+    }
+  })
+}
+</script>
+
 <template>
   <div class="container">
     <!-- Titre + description -->
@@ -12,8 +62,8 @@
           type="text"
           class="large-input mx-auto d-block"
           placeholder="Add your question here"
-          v-model="question"
-        >
+          v-model="polldle.question"
+        />
       </div>
     </div>
 
@@ -26,23 +76,20 @@
         <input
           type="text"
           placeholder="Polldle Option"
-          v-model="newPolldleOptionText"
           class="large-input mx-auto d-block"
-          @keypress.enter="addPolldleOption"
-        >
+          v-model="newPolldleOptionText"
+          @:keypress.enter="addPolldleOption"
+        />
       </div>
     </div>
     <!-- Directive v-show with buttonShown -->
-    <div
-      class="row"
-      v-show="buttonShown"
-    >
+    <div class="row" v-show="buttonShown">
       <div class="col">
         <!-- Directive v-on with clearAllPolldleOptions -->
         <button
           type="button"
           class="clear-button btn-lg btn-danger mx-auto d-block"
-          @click="clearAllPolldleOptions"
+          @:click="clearAllPolldleOptions"
         >
           Clear all PollDLE Options
         </button>
@@ -51,128 +98,48 @@
 
     <!-- PollDLE option -->
     <!-- Directive v-for with polldleOptions -->
-    <div
-      class="row justify-content-center"
-      v-for="currentPolldleOption in polldleOptions"
+    <div class="row justify-content-center"
+      v-for="currentPolldleOption in polldle.polldleOptions"
       :key="currentPolldleOption.text"
-    >
-      <!-- Instance CreatePolldleOption component -->
+      >
+        <!-- Instance CreatePolldleOption component -->
     </div>
+
     <!-- Button Action -->
+    <!-- Directive v-bind with isCreatePolldleDisabled() -->
     <div class="row">
       <div class="col">
-        <!-- Directive v-bind with isCreatePolldleDisabled() -->
         <!-- Directive v-on with createPolldle -->
         <button
           type="button"
           class="validate-button btn-lg btn-primary mx-auto d-block"
-          @click="createPolldle"
           :disabled="isCreatePolldleDisabled()"
+          @:click="createPolldle"
         >
           Create PollDLE
         </button>
       </div>
     </div>
 
-    <div
-      class="alert alert-primary"
-      role="alert"
-    >
-      <h4 class="alert-heading">
-        Summary of your PollDLE
-      </h4>
-      <hr>
+    <div class="alert alert-primary" role="alert">
+      <h4 class="alert-heading">Summary of your PollDLE</h4>
+      <hr />
       <p>
-        The question is:
-        <strong>
-          <!-- Mustache with question -->
-          <strong>{{ question }}</strong>
-        </strong>
+        The question is: <strong>{{ polldle.question }}</strong>
       </p>
       <p>Number of PollDLE options: TODO</p>
     </div>
 
-    <!-- Directive v-show with errorMessage -->
     <!-- Directive v-text with errorMessage -->
+    <!-- Directive v-show with errorMessage -->
     <div
-      v-show="errorMessage !== ''"
       class="error-message alert alert-danger"
       role="alert"
       v-text="errorMessage"
-    />
+      v-show="errorMessage !== ''"
+    ></div>
   </div>
 </template>
-
-<script>
-// Import CreatePolldleOption component
-export default {
-  name: "CreatePolldle",
-  // Add dependencies on CreatePolldleOption component
-  data() {
-    return {
-      question: "",
-      newPolldleOptionText: "",
-      polldleOptions: [],
-      errorMessage: "",
-      buttonShown: false
-    };
-  },
-  // Watcher on polldleOptions
-  watch: {
-    polldleOptions() {
-      this.buttonShown =
-        this.polldleOptions != null && !(this.polldleOptions.length === 0);
-    }
-  },
-  // Computed property listSize when polldleOptions changes
-  computed: {
-    listSize() {
-      return this.polldleOptions.length;
-    }
-  },
-  methods: {
-    removedPolldleOption(polldleOption) {
-      let index = this.polldleOptions.indexOf(polldleOption);
-      this.polldleOptions.splice(index, 1);
-      this.errorMessage = "";
-    },
-
-    addPolldleOption() {
-      this.polldleOptions.push({
-        text: this.newPolldleOptionText
-      });
-      this.newPolldleOptionText = "";
-    },
-
-    clearAllPolldleOptions() {
-      this.polldleOptions = [];
-      this.errorMessage = "";
-    },
-
-    createPolldle() {
-      var polldleObject = {
-        question: this.question,
-        polldleOptions: []
-      };
-
-      this.polldleOptions.forEach(element => {
-        var newPollOptionElement = { name: element.text };
-        if (element.text !== "") {
-          polldleObject.polldleOptions.push(newPollOptionElement);
-        }
-      });
-    },
-
-    isCreatePolldleDisabled() {
-      return (
-        this.polldleOptions === null ||
-        this.polldleOptions.length < 2 ||
-        this.question === ""
-      );
-    }
-  }
-};
-</script>
 
 <style>
 .large-input {

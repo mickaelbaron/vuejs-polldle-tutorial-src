@@ -1,61 +1,27 @@
-<template>
-  <div class="container">
-    <div v-if="!isErrorState()">
-      <h1>{{ question }}</h1>
-      <div class="row">
-        <div class="col-8">
-          <highcharts
-            :options="options"
-            ref="highcharts"
-          />
-        </div>
-        <div class="col-4">
-          <div
-            v-for="polldleOption in data"
-            :key="polldleOption.name"
-          >
-            {{ polldleOption.name }}: {{ polldleOption.y }}
-          </div>
-        </div>
-      </div>
-
-      <div v-if="isEmptyState()">
-        <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
-      </div>
-    </div>
-    <div
-      v-else
-      class="error-message alert alert-danger"
-      role="alert"
-    >
-      {{ errorMessage }}
-    </div>
-  </div>
-</template>
-
-<script>
-import VueHighcharts from "vue-highcharts";
-import capitalizeFirstLetter from "./utils.js";
-
-import Vue from "vue";
-Vue.use(VueHighcharts);
+<script setup>
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { Chart } from 'highcharts-vue'
 
 const stateResult = {
-  RESULT: "result",
-  EMPTY: "empty",
-  ERROR: "error"
-};
+  RESULT: 'result',
+  EMPTY: 'empty',
+  ERROR: 'error'
+}
 
-var options = {
+const chartOptions = {
   chart: {
     plotBackgroundColor: null,
     plotBorderWidth: null,
     plotShadow: false,
-    type: "pie",
+    type: 'pie',
     animation: false
   },
+  accessibility: {
+    enabled: false
+  },
   title: {
-    text: null
+    text: ' '
   },
   plotOptions: {
     series: {
@@ -71,90 +37,105 @@ var options = {
   },
   series: [
     {
-      name: "Vote",
+      name: 'Vote',
       colorByPoint: true,
       data: []
     }
   ],
   loading: false
-};
+}
 
-export default {
-  name: "ResultPolldle",
-  data: () => ({
-    total: 0,
-    state: null,
-    question: "",
-    errorMessage: "",
-    options: options,
-    data: []
-  }),
-  watch: {
-    data() {
-      var chart = this.$refs.highcharts.chart;
-      chart.series[0].update(
-        {
-          data: this.data
-        },
-        true
-      );
+const route = useRoute()
+
+const question = ref('')
+const state = ref(null)
+const errorMessage = ref('')
+const options = ref(chartOptions)
+
+let source = new EventSource(
+  import.meta.env.VITE_APP_SERVER_URL +
+    '/polldles/' +
+    route.params.pathurl +
+    '/votes/sse'
+)
+
+source.addEventListener(
+  'update-polldleresult',
+  (e) => {
+    var result = JSON.parse(e.data)
+    question.value = capitalizeFirstLetter(result.question)
+
+    let total = result.results
+      .map((val) => val.counter)
+      .reduce((partial_sum, a) => partial_sum + a)
+
+    if (total > 0) {
+      state.value = stateResult.RESULT
+    } else {
+      state.value = stateResult.EMPTY
     }
+
+    options.value.series[0].data = result.results.map((val) => ({
+      name: val.name,
+      y: val.counter
+    }))
   },
-  created() {
-    var source = new EventSource(
-      process.env.VUE_APP_SERVER_URL +
-        "/polldles/" +
-        this.$route.params.pathurl +
-        "/votes/sse"
-    );
+  false
+)
 
-    source.addEventListener(
-      "update-polldleresult",
-      e => {
-        var result = JSON.parse(e.data);
-        this.options.title.text = "  ";
-        this.question = capitalizeFirstLetter(result.question);
+source.onerror = () => {
+  state.value = stateResult.ERROR
+  errorMessage.value = 'Problem to retrieve Polldle result.'
+}
 
-        this.data = result.results.map(val => ({
-          name: val.name,
-          y: val.counter
-        }));
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
 
-        this.total = result.results
-          .map(val => val.counter)
-          .reduce((partial_sum, a) => partial_sum + a);
+function isResultState() {
+  return state.value === stateResult.RESULT
+}
 
-        if (this.total > 0) {
-          this.state = stateResult.RESULT;
-        } else {
-          this.state = stateResult.EMPTY;
-        }
+function isErrorState() {
+  return state.value === stateResult.ERROR
+}
 
-        this.options.series[0].data = this.data;
-      },
-      false
-    );
-
-    source.onerror = () => {
-      this.state = stateResult.ERROR;
-      this.errorMessage = "Problem to retrieve Polldle result.";
-    };
-  },
-  methods: {
-    isResultState() {
-      return this.state === stateResult.RESULT;
-    },
-
-    isEmptyState() {
-      return this.state === stateResult.EMPTY;
-    },
-
-    isErrorState() {
-      return this.state === stateResult.ERROR;
-    }
-  }
-};
+function isEmptyState() {
+  return state.value === stateResult.EMPTY
+}
 </script>
 
-<style>
-</style>
+<template>
+  <div class="container">
+    <div v-if="isResultState()">
+      <h1>{{ question }}</h1>
+      <div class="row">
+        <div class="col-8">
+          <Chart :options="options"></Chart>
+        </div>
+        <div class="col-4">
+          <div
+            v-for="polldleOption in options.series[0].data"
+            :key="polldleOption.name"
+          >
+            {{ polldleOption.name }}: {{ polldleOption.y }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else-if="isEmptyState()">
+      <h2>
+        No vote at this moment, keep in touch.<br />Results update in real-time.
+      </h2>
+    </div>
+    <div
+      v-else-if="isErrorState()"
+      class="error-message alert alert-danger"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
+
+<style></style>

@@ -1,49 +1,25 @@
-<template>
-  <div class="container">
-    <!-- Directive v-if with !isErrorState() -->
-    <div>
-      <!-- Mustache with question -->
-      <h1>{{ question }}</h1>
-      <div class="row">
-        <div class="col-8" />
-        <div class="col-4">
-          <div />
-        </div>
-      </div>
+<script setup>
+import { ref } from 'vue'
 
-      <!-- Directive v-if with isEmptyState() -->
-      <div>
-        <h2>No vote at this moment, keep in touch. Results update in real-time.</h2>
-      </div>
-    </div>
-    <!-- Directive v-else -->
-    <!-- Mustache with errorMessage -->
-    <div
-      class="error-message alert alert-danger"
-      role="alert"
-    >
-      {{ errorMessage }}
-    </div>
-  </div>
-</template>
-
-<script>
 const stateResult = {
-  RESULT: "result",
-  EMPTY: "empty",
-  ERROR: "error"
-};
+  RESULT: 'result',
+  EMPTY: 'empty',
+  ERROR: 'error'
+}
 
-var options = {
+const chartOptions = {
   chart: {
     plotBackgroundColor: null,
     plotBorderWidth: null,
     plotShadow: false,
-    type: "pie",
+    type: 'pie',
     animation: false
   },
+  accessibility: {
+    enabled: false
+  },
   title: {
-    text: null
+    text: ' '
   },
   plotOptions: {
     series: {
@@ -59,39 +35,61 @@ var options = {
   },
   series: [
     {
-      name: "Vote",
+      name: 'Vote',
       colorByPoint: true,
       data: []
     }
   ],
   loading: false
-};
+}
 
-export default {
-  name: "ResultPolldle",
-  data: () => ({
-    total: 0,
-    state: null,
-    question: "",
-    errorMessage: "",
-    options: options,
-    data: []
-  }),
-  methods: {
-    isResultState() {
-      return this.state === stateResult.RESULT;
-    },
+const question = ref('')
+const state = ref(null)
+const errorMessage = ref('')
+const options = ref(chartOptions)
 
-    isEmptyState() {
-      return this.state === stateResult.EMPTY;
-    },
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
 
-    isErrorState() {
-      return this.state === stateResult.ERROR;
-    }
-  }
-};
+function isResultState() {
+  return state.value === stateResult.RESULT
+}
+
+function isErrorState() {
+  return state.value === stateResult.ERROR
+}
+
+function isEmptyState() {
+  return state.value === stateResult.EMPTY
+}
 </script>
 
-<style>
-</style>
+<template>
+  <div class="container">
+    <!-- Directive v-if with isResultState() -->
+    <div>
+      <!-- Mustache with question -->
+      <h1>{{ question }}</h1>
+      <div class="row">
+        <div class="col-8"></div>
+        <div class="col-4">
+          <div />
+        </div>
+      </div>
+    </div>
+    <!-- Directive v-else-if with isEmptyState() -->
+    <div>
+      <h2>
+        No vote at this moment, keep in touch.<br />Results update in real-time.
+      </h2>
+    </div>
+    <!-- Directive v-else-if with isErrorState() -->
+    <!-- Mustache with errorMessage -->
+    <div class="error-message alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
+
+<style></style>

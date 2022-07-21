@@ -1,12 +1,10 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import './assets/polldle.css'
 
-require('./assets/polldle.css')
+const app = createApp(App)
 
-Vue.config.productionTip = false
+app.use(router)
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+app.mount('#app')

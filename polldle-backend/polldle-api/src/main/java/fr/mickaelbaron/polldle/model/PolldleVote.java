@@ -12,11 +12,6 @@ public class PolldleVote {
 	 */
 	private List<Byte> polldleOptionResponses;
 
-	/**
-	 * Poll identifier.
-	 */
-	private String pathUrl;
-
 	public List<Byte> getPolldleOptionResponses() {
 		return polldleOptionResponses;
 	}
@@ -25,19 +20,10 @@ public class PolldleVote {
 		this.polldleOptionResponses = polldleOptionResponses;
 	}
 
-	public String getPathUrl() {
-		return pathUrl;
-	}
-
-	public void setPathUrl(String pathUrl) {
-		this.pathUrl = pathUrl;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((pathUrl == null) ? 0 : pathUrl.hashCode());
 		result = prime * result + ((polldleOptionResponses == null) ? 0 : polldleOptionResponses.hashCode());
 		return result;
 	}
@@ -51,11 +37,6 @@ public class PolldleVote {
 		if (getClass() != obj.getClass())
 			return false;
 		PolldleVote other = (PolldleVote) obj;
-		if (pathUrl == null) {
-			if (other.pathUrl != null)
-				return false;
-		} else if (!pathUrl.equals(other.pathUrl))
-			return false;
 		if (polldleOptionResponses == null) {
 			if (other.polldleOptionResponses != null)
 				return false;

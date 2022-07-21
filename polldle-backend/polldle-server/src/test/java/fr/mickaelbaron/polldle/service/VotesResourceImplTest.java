@@ -53,7 +53,7 @@ public class VotesResourceImplTest extends AbstractCDIUnitTest {
 	public void createVoteTest() {
 		// given
 		PolldleVote newPollVote = new PolldleVote();
-		newPollVote.setPathUrl("1");
+		currentVotesResource.setPathURL("1");
 		newPollVote.setPolldleOptionResponses(Arrays.asList((byte) 1));
 
 		PolldleEntity genericPollDBFactory = BeanFactory.genericPollDBWithIDFactory();
@@ -75,7 +75,7 @@ public class VotesResourceImplTest extends AbstractCDIUnitTest {
 	public void createVoteSillVotedTest() {
 		// given
 		PolldleVote newPollVote = new PolldleVote();
-		newPollVote.setPathUrl("1");
+		currentVotesResource.setPathURL("1");
 		newPollVote.setPolldleOptionResponses(Arrays.asList((byte) 1));
 
 		Cookie newCookie = new Cookie(ApiCookies.POLLDLE_VOTE, "1");
@@ -101,7 +101,7 @@ public class VotesResourceImplTest extends AbstractCDIUnitTest {
 	public void createVoteSillVotedWithOtherVotesTest() {
 		// given
 		PolldleVote newPollVote = new PolldleVote();
-		newPollVote.setPathUrl("1");
+		currentVotesResource.setPathURL("1");
 		newPollVote.setPolldleOptionResponses(Arrays.asList((byte) 1));
 
 		Cookie newCookie = new Cookie(ApiCookies.POLLDLE_VOTE, "1/2/3/4/5");
@@ -127,7 +127,7 @@ public class VotesResourceImplTest extends AbstractCDIUnitTest {
 	public void createVoteWithOtherVotesTest() {
 		// given
 		PolldleVote newPollVote = new PolldleVote();
-		newPollVote.setPathUrl("1");
+		currentVotesResource.setPathURL("1");
 		newPollVote.setPolldleOptionResponses(Arrays.asList((byte) 1));
 
 		Cookie newCookie = new Cookie(ApiCookies.POLLDLE_VOTE, "2/3/4/5");
@@ -152,7 +152,7 @@ public class VotesResourceImplTest extends AbstractCDIUnitTest {
 		Mockito.when(pollDAO.getPolldleByPathURL("1")).thenReturn(Optional.of(genericPollDBFactory));
 
 		PolldleVote newPollVote = new PolldleVote();
-		newPollVote.setPathUrl("1");
+		currentVotesResource.setPathURL("1");
 		newPollVote.setPolldleOptionResponses(Arrays.asList((byte) 3));
 
 		// when
@@ -173,7 +173,7 @@ public class VotesResourceImplTest extends AbstractCDIUnitTest {
 		Mockito.when(pollDAO.getPolldleByPathURL("1")).thenReturn(Optional.empty());
 
 		PolldleVote newPollVote = new PolldleVote();
-		newPollVote.setPathUrl("1");
+		currentVotesResource.setPathURL("1");
 		newPollVote.setPolldleOptionResponses(Arrays.asList((byte) 3));
 
 		// when

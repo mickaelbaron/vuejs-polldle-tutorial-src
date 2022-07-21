@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.ApplicationPath;
 
+import org.glassfish.jersey.logging.LoggingFeature;
+
 import fr.mickaelbaron.polldle.CrossDomainFilter;
 
 /**
@@ -23,6 +25,7 @@ public class PolldleApplication extends javax.ws.rs.core.Application {
 		s.add(PolldlesResourceImpl.class);
 		s.add(VotesResourceImpl.class);
 		s.add(CrossDomainFilter.class);
+		s.add(LoggingFeature.class);
 		return s;
 	}
 }

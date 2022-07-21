@@ -1,3 +1,13 @@
+<script setup>
+// Add properties definition on polldleOption object
+defineProps({
+  polldleOption: {
+    type: Object,
+    required: true
+  }
+})
+</script>
+
 <template>
   <div class="polldle-option-input row justify-content-center no-gutters">
     <div class="col col-auto">
@@ -8,43 +18,20 @@
         readonly
         :value="polldleOption.text"
         :title="polldleOption.text"
-      >
+      />
     </div>
     <div class="col col-auto">
-      <!-- Directive v-on with removePolldleOption -->
+      <!-- Trigger an event to the parent component -->
       <button
         class="btn btn-outline-secondary"
         type="button"
-        @click="removePolldleOption(polldleOption)"
+        @click="$emit('removed-polldle-option', polldleOption)"
       >
         X
       </button>
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "CreatePolldleOption",
-  data() {
-    return {
-    };
-  },
-  methods: {
-    removePolldleOption(polldleOption) {
-      // Trigger an event on the current instance
-      this.$emit("removed-polldle-option", polldleOption);
-    }
-  },
-  // Add properties definition on polldleOption object
-  props: {
-    polldleOption: {
-      type: Object,
-      required: true
-    }
-  }
-};
-</script>
 
 <style>
 .polldle-option-input {
