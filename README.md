@@ -4,17 +4,18 @@ Voting done simply in real-time with Polldle. PollDLE ~= Poll + the last part of
 
 Some technicals concepts in this application:
 
-* front-end in Vue.js and Vue CLI,
+* front-end in Vue.js 2 and Vue CLI,
 * back-end in Java with MicroProfile and KumuluzEE implementation (JAX-RS and CDI),
 * using the given/when/then style for Java unit test,
 * full build with Docker with multi-stage build feature,
 * deployement with Docker.
 
-> All instructions to understand how to develop a front part with [Vue.js](https://vuejs.org/) can be found here (in french): https://mickael-baron.fr/web/vuejs-miseenoeuvre-part2 and https://mickael-baron.fr/web/vuejs-deploiement-part3 
+> All instructions to understand how to develop a front part with [Vue.js](https://vuejs.org/) can be found here (in french): https://mickael-baron.fr/web/vuejs2-miseenoeuvre-part2 and https://mickael-baron.fr/web/vuejs-deploiement-part3 
 
 ## Software requirements
 
 * Docker (that's all)
+* Docker-Compose
 
 ## Platform
 
@@ -30,7 +31,7 @@ In fact, all operating systems that support Docker can build and test PollDLE.
 Clone the latest development source:
 
 ```console
-git clone https://github.com/mickaelbaron/vuejs-polldle-tutorial-src
+$ git clone https://github.com/mickaelbaron/vuejs-polldle-tutorial-src
 ```
 
 ## Configure
@@ -66,13 +67,13 @@ server {
 To build without subpath: <https://localhost>, execute this command line:
 
 ```console
-docker-compose build --build-arg script_name=build
+$ docker-compose build --build-arg script_name=build
 ```
 
 To build with subpath: <http://localhost/YOUR_SUBPATH>, execute this command line:
 
 ```console
-docker-compose build  --build-arg script_name=subpath
+$ docker-compose build  --build-arg script_name=subpath
 ```
 
 To check if the images are been built, execute this command line:
@@ -91,7 +92,7 @@ mickaelbaron/polldle-backend   latest              3fbc76dd4c2a        About a m
 From the root of the project, execute this command line:
 
 ```console
-docker-compose up -d
+$ docker-compose up -d
 ```
 
 Open your preferred web browser and go to this url: <http://localhost> (without subpath) or <http://localhost/YOUR_SUBPATH> (with a subpath).
