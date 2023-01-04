@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "highcharts-vue": "^1.4.0",
-    "vue": "^3.2.37"
+    "vue": "^3.2.37",
+    "bootstrap": "^5.2.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",
