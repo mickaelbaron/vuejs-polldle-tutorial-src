@@ -76,7 +76,7 @@ function createPolldle() {
           placeholder="Polldle Option"
           class="large-input mx-auto d-block"
           v-model="newPolldleOptionText"
-          @:keypress.enter="addPolldleOption"
+          @keypress.enter="addPolldleOption"
         />
       </div>
     </div>
@@ -87,7 +87,7 @@ function createPolldle() {
         <button
           type="button"
           class="clear-button btn-lg btn-danger mx-auto d-block"
-          @:click="clearAllPolldleOptions"
+          @click="clearAllPolldleOptions"
         >
           Clear all PollDLE Options
         </button>
@@ -107,7 +107,7 @@ function createPolldle() {
           type="button"
           class="validate-button btn-lg btn-primary mx-auto d-block"
           :disabled="isCreatePolldleDisabled()"
-          @:click="createPolldle"
+          @click="createPolldle"
         >
           Create PollDLE
         </button>
