@@ -8,7 +8,7 @@
 		<version>0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>polldle-api</artifactId>
-	<name>poddle-api</name>
+	<name>polldle-api</name>
 
 	<dependencies>
 		<dependency>
