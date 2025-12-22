@@ -1,10 +1,10 @@
 <script setup>
 import { ref, reactive } from 'vue'
 
-const errorMessage = ref('Problem to create a new Polldle')
+const errorMessage = ref('')
 const buttonShown = ref(false)
 const polldle = reactive({
-  question: 'Aimez-vous les frites ?',
+  question: '',
   polldleOptions: []
 })
 const newPolldleOptionText = ref('')
@@ -47,7 +47,7 @@ function createPolldle() {
 </script>
 
 <template>
-  <div ref="el" class="container">
+  <div class="container">
     <!-- Titre + description -->
     <h1>PollDLE</h1>
     <h2>Voting done simply in real-time</h2>
@@ -55,12 +55,7 @@ function createPolldle() {
     <!-- PollDLE name -->
     <div class="row">
       <div class="col">
-        <!-- Directive v-model with question -->
-        <input
-          type="text"
-          class="large-input mx-auto d-block"
-          placeholder="Add your question here"
-        />
+        <input type="text" class="large-input mx-auto d-block" placeholder="Add your question here" />
       </div>
     </div>
 
@@ -68,39 +63,25 @@ function createPolldle() {
 
     <div class="row">
       <div class="col">
-        <!-- Directive v-model with newPolldleOptionText -->
-        <!-- Directive v-on with addPolldleOption -->
-        <input
-          type="text"
-          placeholder="Polldle Option"
-          class="large-input mx-auto d-block"
-        />
+        <input type="text" placeholder="Polldle Option" class="large-input mx-auto d-block" />
       </div>
     </div>
-    <div class="row" v-show="buttonShown">
+    <div class="row">
       <div class="col">
-        <!-- Directive v-on with clearAllPolldleOptions -->
-        <button
-          type="button"
-          class="clear-button btn-lg btn-danger mx-auto d-block"
-        >
+        <button type="button" class="clear-button btn-lg btn-danger mx-auto d-block">
           Clear all PollDLE Options
         </button>
       </div>
     </div>
 
     <!-- PollDLE option -->
-    <div class="row justify-content-center"></div>
+    <div class="row justify-content-center">
+    </div>
 
     <!-- Button Action -->
-    <!-- Directive v-bind with isCreatePolldleDisabled() -->
     <div class="row">
       <div class="col">
-        <!-- Directive v-on with createPolldle -->
-        <button
-          type="button"
-          class="validate-button btn-lg btn-primary mx-auto d-block"
-        >
+        <button type="button" class="validate-button btn-lg btn-primary mx-auto d-block">
           Create PollDLE
         </button>
       </div>
@@ -110,12 +91,11 @@ function createPolldle() {
       <h4 class="alert-heading">Summary of your PollDLE</h4>
       <hr />
       <p>
-        The question is: <strong><!-- Mustache with question --></strong>
+        The question is: <strong>TODO</strong>
       </p>
       <p>Number of PollDLE options: TODO</p>
     </div>
 
-    <!-- Directive v-text with errorMessage -->
     <div class="error-message alert alert-danger" role="alert"></div>
   </div>
 </template>

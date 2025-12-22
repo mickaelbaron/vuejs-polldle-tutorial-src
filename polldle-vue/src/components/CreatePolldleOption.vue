@@ -1,4 +1,5 @@
 <script setup>
+// Add properties definition on polldleOption object
 defineProps({
   polldleOption: {
     type: Object,
@@ -10,6 +11,7 @@ defineProps({
 <template>
   <div class="polldle-option-input row justify-content-center no-gutters">
     <div class="col col-auto">
+      <!-- Bind both value and title attributes with polldleOption property -->
       <input
         type="text"
         class="form-control"
@@ -19,6 +21,7 @@ defineProps({
       />
     </div>
     <div class="col col-auto">
+      <!-- Trigger an event to the parent component -->
       <button
         class="btn btn-outline-secondary"
         type="button"

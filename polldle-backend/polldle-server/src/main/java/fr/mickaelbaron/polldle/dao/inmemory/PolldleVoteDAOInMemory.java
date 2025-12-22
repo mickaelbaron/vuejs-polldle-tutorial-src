@@ -1,9 +1,8 @@
 package fr.mickaelbaron.polldle.dao.inmemory;
 
-import javax.inject.Inject;
-
 import fr.mickaelbaron.polldle.dao.IPolldleVoteDAO;
 import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
+import jakarta.inject.Inject;
 
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)

@@ -57,8 +57,7 @@ const options = ref(chartOptions)
 
 // Use created hook to initialize EventSource object
 // Use environment variable to define REST web service URL
-let source = new EventSource(
-  import.meta.env.VITE_APP_SERVER_URL +
+let source = new EventSource(import.meta.env.VITE_APP_SERVER_URL +
     '/polldles/' +
     route.params.pathurl +
     '/votes/sse'

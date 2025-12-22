@@ -1,4 +1,4 @@
-FROM node:lts-alpine as build-npm-stage
+FROM node:lts-alpine AS build-npm-stage
 LABEL maintainer="Mickael BARON"
 
 WORKDIR /polldle-vue

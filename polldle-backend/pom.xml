@@ -16,31 +16,35 @@
 	</modules>
 
 	<properties>
-		<!-- Maven Dependency Plugin -->
-		<maven.dependency.version>3.1.1</maven.dependency.version>
-
-		<!-- MicroProfile implementation => MicroProfile 3.3 -->
-		<kumuluzee.version>4.1.0</kumuluzee.version>
-
-		<!-- Maven -->
-		<maven.compiler.version>3.1</maven.compiler.version>
+		<maven.compiler.version>3.14.1</maven.compiler.version>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
-
-		<!-- Test -->
-		<cdi-unit.version>4.1.0</cdi-unit.version>
-		<junit.version>4.13.1</junit.version>
-		<mockito.version>1.10.19</mockito.version>
-		<weld.version>3.1.1.Final</weld.version>
-
-		<jaxbapi.version>2.3.0</jaxbapi.version>
-		<javaxactivation.version>1.2.0</javaxactivation.version>
+		<jakarta.platform.version>10.0.0</jakarta.platform.version>
+		<microprofile.version>7.0</microprofile.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>jakarta.platform</groupId>
+				<artifactId>jakarta.jakartaee-bom</artifactId>
+				<version>${jakarta.platform.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.microprofile</groupId>
+				<artifactId>microprofile</artifactId>
+				<version>${microprofile.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!-- Maven Compiler -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -48,69 +52,9 @@
 					<configuration>
 						<source>${maven.compiler.source}</source>
 						<target>${maven.compiler.target}</target>
-						<encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>${maven.dependency.version}</version>
-					<executions>
-						<execution>
-							<id>copy-dependencies</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<includeScope>runtime</includeScope>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- KumuluzEE -->
-			<dependency>
-				<groupId>com.kumuluz.ee</groupId>
-				<artifactId>kumuluzee-bom</artifactId>
-				<version>${kumuluzee.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			
-			<!-- Test -->
-			<dependency>
-				<groupId>org.jglue.cdi-unit</groupId>
-				<artifactId>cdi-unit</artifactId>
-				<version>${cdi-unit.version}</version>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.jboss.weld.se</groupId>
-				<artifactId>weld-se-core</artifactId>
-				<version>${weld.version}</version>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
-				<version>${mockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>

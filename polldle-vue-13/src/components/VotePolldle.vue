@@ -53,10 +53,10 @@ function isVoteErrorState() {
           :key="polldleOption.key"
         >
           <div class="col-4">
-            <div class="radio">
+            <div class="checkbox">
               <label>
                 <input
-                  type="radio"
+                  type="checkbox"
                   v-model="polldle.polldleOptionResponses"
                   :value="polldleOption.id.toString()"
                 />

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+// Import useRoute
 import { useRoute } from 'vue-router'
+// Import the Highcharts-Vue plugin
 import { Chart } from 'highcharts-vue'
 
 const stateResult = {
@@ -45,6 +47,7 @@ const chartOptions = {
   loading: false
 }
 
+// Declare userRoute object
 const route = useRoute()
 
 const question = ref('')
@@ -52,8 +55,9 @@ const state = ref(null)
 const errorMessage = ref('')
 const options = ref(chartOptions)
 
-let source = new EventSource(
-  import.meta.env.VITE_APP_SERVER_URL +
+// Use created hook to initialize EventSource object
+// Use environment variable to define REST web service URL
+let source = new EventSource(import.meta.env.VITE_APP_SERVER_URL +
     '/polldles/' +
     route.params.pathurl +
     '/votes/sse'
@@ -107,13 +111,17 @@ function isEmptyState() {
 
 <template>
   <div class="container">
+    <!-- Directive v-if with isResultState() -->
     <div v-if="isResultState()">
+      <!-- Mustache with question -->
       <h1>{{ question }}</h1>
       <div class="row">
         <div class="col-8">
+          <!-- Instance of highcharts component -->
           <Chart :options="options"></Chart>
         </div>
         <div class="col-4">
+          <!-- Directive v-for with data -->
           <div
             v-for="polldleOption in options.series[0].data"
             :key="polldleOption.name"
@@ -123,14 +131,17 @@ function isEmptyState() {
         </div>
       </div>
     </div>
+    <!-- Directive v-else-if with isEmptyState() -->
     <div v-else-if="isEmptyState()">
       <h2>
         No vote at this moment, keep in touch.<br />Results update in real-time.
       </h2>
     </div>
-    <div
+    <!-- Directive v-else-if with isErrorState() -->
+    <!-- Mustache with errorMessage -->
+    <div 
       v-else-if="isErrorState()"
-      class="error-message alert alert-danger"
+      class="error-message alert alert-danger" 
       role="alert"
     >
       {{ errorMessage }}

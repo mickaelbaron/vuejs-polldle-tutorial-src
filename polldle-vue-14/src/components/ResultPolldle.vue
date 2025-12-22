@@ -52,7 +52,7 @@ const errorMessage = ref('')
 const options = ref(chartOptions)
 
 // Use created hook to initialize EventSource object
-let source = new EventSource('http://127.0.0.1:9991' +
+let source = new EventSource('http://127.0.0.1:9080' +
     '/polldles/1' +
     '/votes/sse'
 )

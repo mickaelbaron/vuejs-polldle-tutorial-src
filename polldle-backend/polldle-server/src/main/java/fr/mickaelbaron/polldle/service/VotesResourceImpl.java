@@ -7,19 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.sse.OutboundSseEvent;
-import javax.ws.rs.sse.Sse;
-import javax.ws.rs.sse.SseBroadcaster;
-import javax.ws.rs.sse.SseEventSink;
-
 import fr.mickaelbaron.polldle.api.ApiCookies;
 import fr.mickaelbaron.polldle.api.NotYetImplementedException;
 import fr.mickaelbaron.polldle.api.VotesResource;
@@ -32,6 +19,18 @@ import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
 import fr.mickaelbaron.polldle.model.PolldleOptionResult;
 import fr.mickaelbaron.polldle.model.PolldleResult;
 import fr.mickaelbaron.polldle.model.PolldleVote;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Cookie;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.sse.OutboundSseEvent;
+import jakarta.ws.rs.sse.Sse;
+import jakarta.ws.rs.sse.SseBroadcaster;
+import jakarta.ws.rs.sse.SseEventSink;
 
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)

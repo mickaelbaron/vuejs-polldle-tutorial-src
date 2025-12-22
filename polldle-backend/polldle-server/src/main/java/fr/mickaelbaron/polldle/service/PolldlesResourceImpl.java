@@ -2,17 +2,16 @@ package fr.mickaelbaron.polldle.service;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ResourceContext;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response.Status;
-
 import fr.mickaelbaron.polldle.api.PolldlesResource;
 import fr.mickaelbaron.polldle.api.VotesResource;
 import fr.mickaelbaron.polldle.dao.IPolldleDAO;
 import fr.mickaelbaron.polldle.entity.PolldleEntity;
 import fr.mickaelbaron.polldle.model.Polldle;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.container.ResourceContext;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)
@@ -50,6 +49,7 @@ public class PolldlesResourceImpl implements PolldlesResource {
 		if (create == null) {
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
+		
 		return create;
 	}
 

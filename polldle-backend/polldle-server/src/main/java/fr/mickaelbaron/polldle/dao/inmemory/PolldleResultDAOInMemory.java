@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import fr.mickaelbaron.polldle.dao.IPolldleResultDAO;
 import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
+import jakarta.inject.Inject;
 
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)

@@ -1,11 +1,11 @@
-<script setup>
-import FooterPolldle from './components/FooterPolldle.vue'
-import CreatePolldle from './components/CreatePolldle.vue'
-</script>
+<script setup></script>
 
 <template>
-  <CreatePolldle />
-  <FooterPolldle />
+  <h1>You did it!</h1>
+  <p>
+    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
+    documentation
+  </p>
 </template>
 
-<style></style>
+<style scoped></style>

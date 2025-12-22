@@ -65,7 +65,7 @@ function removedPolldleOption(polldleOption) {
   errorMessage.value = ''
 }
 
-function createPolldle() {
+async function createPolldle() {
   let polldleObject = {
     question: polldle.question,
     polldleOptions: []
@@ -79,7 +79,7 @@ function createPolldle() {
   })
 
   // Call REST web service with fetch API
-  let request = new Request('http://127.0.0.1:9991' + '/polldles', {
+  let request = new Request('http://127.0.0.1:9080' + '/polldles', {
     method: 'POST',
     body: JSON.stringify(polldleObject),
     headers: {
@@ -87,23 +87,19 @@ function createPolldle() {
     }
   })
 
-  fetch(request)
-    .then((response) => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        errorMessage.value = 'Problem to create a new Polldle.'
-      }
-    })
-    .then((data) => {
-      console.log(data.pathUrl)
-      // Programmatic navigation to display VotePolldle component
-    })
-    .catch((error) => {
-      console.error(error)
-
+  try {
+    const response = await fetch(request)
+    if (!response.ok) {
       errorMessage.value = 'Problem to create a new Polldle.'
-    })
+      throw new Error('HTTP error ' + response.status)
+    }
+
+    const data = await response.json()
+    console.log(data.pathUrl)
+  } catch (error) {
+    errorMessage.value = 'Problem to create a new Polldle.'
+    throw new Error('HTTP error ' + response.status)
+  }
 }
 </script>
 

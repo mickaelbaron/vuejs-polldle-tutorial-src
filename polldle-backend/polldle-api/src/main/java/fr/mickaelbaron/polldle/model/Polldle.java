@@ -44,7 +44,7 @@ public class Polldle {
 		return this.polldleOptions;
 	}
 
-	public void setPollOptions(List<PolldleOption> polldleOptions) {
+	public void setPolldleOptions(List<PolldleOption> polldleOptions) {
 		this.polldleOptions = polldleOptions;
 	}
 

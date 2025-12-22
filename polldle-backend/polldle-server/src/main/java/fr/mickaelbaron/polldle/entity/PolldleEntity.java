@@ -210,7 +210,7 @@ public class PolldleEntity {
 		for (PolldleOptionEntity currentPollOptionDB : pollDB.getPolldleOptions()) {
 			newPollOptions.add(PolldleOptionEntity.create(currentPollOptionDB));
 		}
-		newPoll.setPollOptions(newPollOptions);
+		newPoll.setPolldleOptions(newPollOptions);
 		return newPoll;
 	}
 }

@@ -23,58 +23,45 @@ const errorMessage = ref('')
 // Declare useRouter and userRoute objects
 
 // To retrieve PollDLE information from REST web service
-axios
-  .get('http://127.0.0.1:9991/polldles/1')
-  .then((response) => {
-    if (response.status === 200) {
-      polldle.question = response.data.question
-      polldle.polldleOptions = response.data.polldleOptions
+onMounted(async () => {
+  try {
+    const { data } = await axios.get('http://127.0.0.1:9080/polldles/1')
 
-      state.value = stateResult.WAITING_VOTE
-    } else {
-      errorMessage.value = 'Polldle can not be loaded.'
-      state.value = stateResult.ERROR
-    }
-  })
-  .catch((error) => {
+    polldle.question = data.question
+    polldle.polldleOptions = data.polldleOptions
+    state.value = stateResult.WAITING_VOTE
+  } catch (error) {
     console.error(error)
-
     errorMessage.value = 'Polldle can not be loaded.'
     state.value = stateResult.ERROR
-  })
+  }
+})
 
-function vote() {
+async function vote() {
   if (!isWaitingVoteState()) {
     return
   }
 
   // To vote for a PollDLE from REST web service
-  axios({
-    method: 'post',
-    baseURL: 'http://127.0.0.1:9991/polldles/1/votes',
-    data: JSON.stringify({
-      polldleOptionResponses: [polldle.polldleOptionResponses]
-    }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        console.log('Voted!')
-
-        // Programmatic navigation to display ResultPolldle component
-      } else if (response.status === 204) {
-        state.value = stateResult.VOTE_ERROR
-        errorMessage.value = 'Already voted!'
+  try {
+    await axios.post(
+      'http://127.0.0.1:9080/polldles/1/votes',
+      {
+        polldleOptionResponses: polldle.polldleOptionResponses
       }
-    })
-    .catch((error) => {
-      console.error(error)
+    )
 
+    console.log('Voted!')
+  } catch (error) {
+    if (error.response?.status === 204) {
+      state.value = stateResult.VOTE_ERROR
+      errorMessage.value = 'Already voted!'
+    } else {
+      console.error(error)
       state.value = stateResult.VOTE_ERROR
       errorMessage.value = 'Problem to vote for this Polldle.'
-    })
+    }
+  }
 }
 
 function isErrorState() {
@@ -96,19 +83,12 @@ function isVoteErrorState() {
       <h1>{{ polldle.question }}</h1>
 
       <form>
-        <div
-          class="row justify-content-md-center"
-          v-for="polldleOption in polldle.polldleOptions"
-          :key="polldleOption.key"
-        >
+        <div class="row justify-content-md-center" v-for="polldleOption in polldle.polldleOptions"
+          :key="polldleOption.key">
           <div class="col-4">
-            <div class="radio">
+            <div class="checkbox">
               <label>
-                <input
-                  type="radio"
-                  v-model="polldle.polldleOptionResponses"
-                  :value="polldleOption.id.toString()"
-                />
+                <input type="checkbox" v-model="polldle.polldleOptionResponses" :value="polldleOption.id.toString()" />
                 {{ polldleOption.name }}
               </label>
             </div>
@@ -118,22 +98,14 @@ function isVoteErrorState() {
 
       <div class="row">
         <div class="col">
-          <button
-            type="button"
-            class="validate-button btn-lg btn-primary mx-auto d-block"
-            @click="vote()"
-          >
+          <button type="button" class="validate-button btn-lg btn-primary mx-auto d-block" @click="vote()">
             Vote
           </button>
         </div>
       </div>
     </div>
 
-    <div
-      v-show="isErrorState() || isVoteErrorState()"
-      class="error-message alert alert-danger"
-      role="alert"
-    >
+    <div v-show="isErrorState() || isVoteErrorState()" class="error-message alert alert-danger" role="alert">
       {{ errorMessage }}
     </div>
   </div>

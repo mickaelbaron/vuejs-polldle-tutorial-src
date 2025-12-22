@@ -1,48 +1,71 @@
 package fr.mickaelbaron.polldle.dao.inmemory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import org.jglue.cdiunit.AdditionalClasses;
-import org.jglue.cdiunit.CdiRunner;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import fr.mickaelbaron.polldle.AbstractCDIUnitTest;
 import fr.mickaelbaron.polldle.BeanFactory;
-import fr.mickaelbaron.polldle.dao.IPolldleResultDAO;
-import fr.mickaelbaron.polldle.dao.IPolldleVoteDAO;
+import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
 
-/**
- * @author Mickael BARON (baron.mickael@gmail.com)
- */
-@RunWith(CdiRunner.class)
-@AdditionalClasses({ PolldleResultDAOInMemory.class, PolldleVoteDAOInMemory.class })
-public class PolldleResultDAOInMemoryTest extends AbstractCDIUnitTest {
+public class PolldleResultDAOInMemoryTest {
+    
+    @Mock
+    private InMemoryFactory refSession;
 
-	@Inject
-	private IPolldleResultDAO currentPollResult;
+    @InjectMocks
+    private PolldleResultDAOInMemory dao;
 
-	@Inject
-	private IPolldleVoteDAO currentPollVoteDAO;
+    @BeforeEach
+    void initMocks() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-	@Test
-	public void getPolldleResultByPathURLTest() {
-		// given
-		currentPollVoteDAO.createVote("1", BeanFactory.genericPollVoteDBFactory((byte) 1));
-		currentPollVoteDAO.createVote("1", BeanFactory.genericPollVoteDBFactory((byte) 2));
-		currentPollVoteDAO.createVote("1", BeanFactory.genericPollVoteDBFactory((byte) 1));
-		currentPollVoteDAO.createVote("1", BeanFactory.genericPollVoteDBFactory((byte) 1));
+    @Test
+    public void getPolldleResultByPathURLTest() {
+        // given
+        String pathURL = "1";
 
-		// when
-		final Map<Byte, Integer> pollResultByPathURL = currentPollResult.getPolldleResultByPathURL("1");
+        PolldleVoteEntity vote1 = BeanFactory.genericPollVoteDBFactory((byte) 1);
+        PolldleVoteEntity vote2 = BeanFactory.genericPollVoteDBFactory((byte) 2);
+        PolldleVoteEntity vote3 = BeanFactory.genericPollVoteDBFactory((byte) 1);
+        PolldleVoteEntity vote4 = BeanFactory.genericPollVoteDBFactory((byte) 1);
 
-		// then
-		Assert.assertNotNull(pollResultByPathURL);
-		Assert.assertEquals(3, (int) pollResultByPathURL.get((byte) 1));
-		Assert.assertEquals(1, (int) pollResultByPathURL.get((byte) 2));
-		Assert.assertEquals(2, pollResultByPathURL.size());
-	}
+        List<PolldleVoteEntity> votes = Arrays.asList(vote1, vote2, vote3, vote4);
+
+        when(refSession.getPollVoteDBByPathUrl(pathURL)).thenReturn(votes);
+
+        // when
+        Map<Byte, Integer> result = dao.getPolldleResultByPathURL(pathURL);
+
+        // then
+        assertNotNull(result);
+        assertEquals(3, (int) result.get((byte) 1));
+        assertEquals(1, (int) result.get((byte) 2));
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    public void getPolldleResultByPathURLEmptyTest() {
+        // given
+        String pathURL = "empty";
+        when(refSession.getPollVoteDBByPathUrl(pathURL)).thenReturn(null);
+
+        // when
+        Map<Byte, Integer> result = dao.getPolldleResultByPathURL(pathURL);
+
+        // then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
 }

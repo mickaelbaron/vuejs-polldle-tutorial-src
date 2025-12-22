@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import fr.mickaelbaron.polldle.entity.PolldleEntity;
 import fr.mickaelbaron.polldle.entity.PolldleVoteEntity;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)

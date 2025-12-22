@@ -57,7 +57,7 @@ const options = ref(chartOptions)
 
 // Use created hook to initialize EventSource object
 // Use environment variable to define REST web service URL
-let source = new EventSource('http://127.0.0.1:9991' +
+let source = new EventSource('http://127.0.0.1:9080' +
     '/polldles/' +
     route.params.pathurl +
     '/votes/sse'

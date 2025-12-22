@@ -1,0 +1,31 @@
+services:
+
+  backend:
+    build: polldle-backend/
+    image: mickaelbaron/polldle-backend
+    environment: 
+      HTTP_PORT: 9080
+    ports:
+      - "9080:9080"
+    networks:
+      - polldlenetwork
+
+  frontend:
+    build: polldle-vue/
+    image: mickaelbaron/polldle-vue
+    networks:
+      - polldlenetwork
+
+  rp:
+    build: polldle-rp/
+    image: mickaelbaron/polldle-rp
+    depends_on:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - polldlenetwork
+
+networks:
+  polldlenetwork:

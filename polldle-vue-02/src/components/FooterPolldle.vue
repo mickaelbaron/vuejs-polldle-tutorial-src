@@ -8,8 +8,7 @@ const description = ref(
 
 <template>
   <div class="container">
-    <!-- Directive v-once -->
-    <p class="footer"><!-- Mustache with description --></p>
+    <p class="footer" />
   </div>
 </template>
 

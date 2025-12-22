@@ -1,150 +1,148 @@
 package fr.mickaelbaron.polldle.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-
-import org.jglue.cdiunit.AdditionalClasses;
-import org.jglue.cdiunit.CdiRunner;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import fr.mickaelbaron.polldle.AbstractCDIUnitTest;
 import fr.mickaelbaron.polldle.BeanFactory;
-import fr.mickaelbaron.polldle.api.PolldlesResource;
 import fr.mickaelbaron.polldle.dao.IPolldleDAO;
 import fr.mickaelbaron.polldle.entity.PolldleEntity;
 import fr.mickaelbaron.polldle.model.Polldle;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.container.ResourceContext;
 
-/**
- * @author Mickael BARON (baron.mickael@gmail.com)
- */
-@RunWith(CdiRunner.class)
-@AdditionalClasses(PolldlesResourceImpl.class)
-public class PolldlesResourceImplTest extends AbstractCDIUnitTest {
+@ExtendWith(MockitoExtension.class)
+public class PolldlesResourceImplTest {
 
-	@Inject
-	private PolldlesResource currentAdminResource;
+    @Mock
+    private IPolldleDAO pollDAO;
 
-	@Produces
-	@Mock
-	IPolldleDAO pollDAO;
+    @Mock
+    private ResourceContext resourceContext;
 
-	@Test
-	public void getPolldleByPathURLTest() {
-		// given
-		final PolldleEntity genericPollDBFactory = BeanFactory.genericPollDBFactory();
-		Mockito.when(pollDAO.getPolldleByPathURL("1")).thenReturn(Optional.of(genericPollDBFactory));
+    @InjectMocks
+    private PolldlesResourceImpl resource;
 
-		// when
-		final Polldle pollByPathURL = currentAdminResource.getPolldleByPathURL("1");
+    // -----------------------
+    // getPolldleByPathURL
+    // -----------------------
 
-		// then
-		Assert.assertNotNull(pollByPathURL);
-		Assert.assertNull(pollByPathURL.getKey());
-	}
+    @Test
+    void getPolldleByPathURL_success() {
+        // given
+        PolldleEntity pollEntity = BeanFactory.genericPollDBFactory();
+        when(pollDAO.getPolldleByPathURL("1"))
+                .thenReturn(Optional.of(pollEntity));
 
-	@Test
-	public void getPolldleByPathURLWithoutParameterTest() {
-		// given
+        // when
+        Polldle result = resource.getPolldleByPathURL("1");
 
-		// when
-		try {
-			currentAdminResource.getPolldleByPathURL(null);
-		} catch (WebApplicationException e) {
-			// then
-			Assert.assertEquals("Path URL is missing.", e.getMessage());
-		}
-	}
+        // then
+        assertNotNull(result);
+        assertNull(result.getKey()); // données privées supprimées
+        verify(pollDAO).getPolldleByPathURL("1");
+    }
 
-	@Test
-	public void createPollTest() {
-		// given
-		Polldle newPoll = BeanFactory.genericPollFactory();
-		final PolldleEntity genericPollDBFactory = BeanFactory.genericPollDBFactory();
-		genericPollDBFactory.setPathUrl("1");
-		Mockito.when(pollDAO.createPolldle(Mockito.any())).thenReturn(genericPollDBFactory);
+    @Test
+    void getPolldleByPathURL_nullParameter() {
+        // given
 
-		// when
-		final Polldle createPoll = currentAdminResource.createPolldle(newPoll);
+        // when / then
+        WebApplicationException ex = assertThrows(WebApplicationException.class,
+                () -> resource.getPolldleByPathURL(null));
 
-		// then
-		Mockito.verify(pollDAO, Mockito.times(1)).createPolldle(Mockito.any());
-		Assert.assertTrue(createPoll.getPathUrl() != null);
-		Assert.assertEquals(createPoll.getPathUrl(), "1");
-	}
+        assertEquals("Path URL is missing.", ex.getMessage());
+        verifyNoInteractions(pollDAO);
+    }
 
-	@Test
-	public void createPollWithDAOProblemTest() {
-		// given
-		Polldle newPoll = BeanFactory.genericPollFactory();
-		Mockito.when(pollDAO.createPolldle(Mockito.any())).thenReturn(null);
+    @Test
+    void getPolldleByPathURL_notFound() {
+        // given
+        when(pollDAO.getPolldleByPathURL("1"))
+                .thenReturn(Optional.empty());
 
-		// when
-		try {
-			currentAdminResource.createPolldle(newPoll);
-			// then
-			Assert.fail("Must throw a WebApplicationException");
-		} catch (WebApplicationException e) {
-			Assert.assertEquals("HTTP 500 Internal Server Error", e.getMessage());
-		}
+        // when / then
+        WebApplicationException ex = assertThrows(WebApplicationException.class,
+                () -> resource.getPolldleByPathURL("1"));
 
-		// then
-		Mockito.verify(pollDAO, Mockito.times(1)).createPolldle(Mockito.any());
-	}
+        assertEquals("No Polldle with this path URL.", ex.getMessage());
+    }
 
-	@Test
-	public void createPollWithoutQuestionContentTest() {
-		// given
-		Polldle newPoll = BeanFactory.genericPollFactory();
-		newPoll.setQuestion(null);
+    // -----------------------
+    // createPolldle
+    // -----------------------
 
-		// when
-		try {
-			currentAdminResource.createPolldle(newPoll);
-			// then
-			Assert.fail("Must throw a WebApplicationException");
-		} catch (WebApplicationException e) {
-			Assert.assertEquals("Question is missing.", e.getMessage());
-		}
-	}
+    @Test
+    void createPoll_success() {
+        // given
+        Polldle poll = BeanFactory.genericPollFactory();
+        PolldleEntity entity = BeanFactory.genericPollDBFactory();
+        entity.setPathUrl("1");
 
-	@Test
-	public void createPollWithoutConfigurationContentTest() {
-		// given
-		Polldle newPoll = BeanFactory.genericPollFactory();
-		final PolldleEntity genericPollDBFactory = BeanFactory.genericPollDBFactory();
-		genericPollDBFactory.setPathUrl("1");
-		Mockito.when(pollDAO.createPolldle(Mockito.any())).thenReturn(genericPollDBFactory);
+        when(pollDAO.createPolldle(any()))
+                .thenReturn(entity);
 
-		// when
-		final Polldle createPoll = currentAdminResource.createPolldle(newPoll);
+        // when
+        Polldle created = resource.createPolldle(poll);
 
-		// then
-		Mockito.verify(pollDAO, Mockito.times(1)).createPolldle(Mockito.any());
-		Assert.assertTrue(createPoll.getPathUrl() != null);
-		Assert.assertEquals(createPoll.getPathUrl(), "1");
-	}
+        // then
+        assertNotNull(created);
+        assertEquals("1", created.getPathUrl());
+        verify(pollDAO).createPolldle(any());
+    }
 
-	@Test
-	public void createPollWithoutPollOptionsContentTest() {
-		// given
-		Polldle newPoll = BeanFactory.genericPollFactory();
-		newPoll.setPollOptions(null);
+    @Test
+    void createPoll_daoReturnsNull() {
+        Polldle poll = BeanFactory.genericPollFactory();
+        when(pollDAO.createPolldle(any())).thenReturn(null);
 
-		// when
-		try {
-			currentAdminResource.createPolldle(newPoll);
-			// then
-			Assert.fail("Must throw a WebApplicationException");
-		} catch (WebApplicationException e) {
-			Assert.assertEquals("Polldle option can not be null and must contain at least two elements.",
-					e.getMessage());
-		}
-	}
+        WebApplicationException ex =
+                assertThrows(WebApplicationException.class,
+                        () -> resource.createPolldle(poll));
+
+        assertEquals("HTTP 500 Internal Server Error", ex.getMessage());
+        verify(pollDAO).createPolldle(any());
+    }
+
+    @Test
+    void createPoll_withoutQuestion() {
+        Polldle poll = BeanFactory.genericPollFactory();
+        poll.setQuestion(null);
+
+        WebApplicationException ex =
+                assertThrows(WebApplicationException.class,
+                        () -> resource.createPolldle(poll));
+
+        assertEquals("Question is missing.", ex.getMessage());
+        verifyNoInteractions(pollDAO);
+    }
+
+    @Test
+    void createPoll_withoutPollOptions() {
+        Polldle poll = BeanFactory.genericPollFactory();
+        poll.setPolldleOptions(null);
+
+        WebApplicationException ex =
+                assertThrows(WebApplicationException.class,
+                        () -> resource.createPolldle(poll));
+
+        assertEquals(
+            "Polldle option can not be null and must contain at least two elements.",
+            ex.getMessage()
+        );
+        verifyNoInteractions(pollDAO);
+    }
 }
